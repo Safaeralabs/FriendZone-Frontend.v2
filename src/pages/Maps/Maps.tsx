@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
 import L from 'leaflet';
@@ -111,10 +111,10 @@ const Maps: React.FC = () => {
   const navigate = useNavigate();
   const { hangouts, events, offers } = useApp();
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [mapStyle, setMapStyle] = useState<MapStyle>('light'); // Change this to switch styles
+  const [mapStyle, setMapStyle] = useState<MapStyle>('light');
 
   // Mock coordinates
-  const getCoordinates = (index: number, type: string) => {
+  const getCoordinates = (index: number) => {
     const baseLat = 37.7749;
     const baseLng = -122.4194;
     return {
@@ -127,10 +127,11 @@ const Maps: React.FC = () => {
   const mapItems = useMemo(() => {
     const items: MapItem[] = [];
 
+    // Add hangouts
     hangouts.forEach((h, index) => {
       const hangoutTime = new Date(h.time);
       const isToday = hangoutTime.toDateString() === new Date().toDateString();
-      const coords = getCoordinates(index, 'hangout');
+      const coords = getCoordinates(index);
       
       items.push({
         id: h.id,
@@ -145,10 +146,11 @@ const Maps: React.FC = () => {
       });
     });
 
+    // Add events
     events.forEach((e, index) => {
       const eventTime = new Date(e.time);
       const isToday = eventTime.toDateString() === new Date().toDateString();
-      const coords = getCoordinates(index + 100, 'event');
+      const coords = getCoordinates(index + 100);
       
       items.push({
         id: e.id,
@@ -163,8 +165,9 @@ const Maps: React.FC = () => {
       });
     });
 
+    // Add offers
     offers.forEach((o, index) => {
-      const coords = getCoordinates(index + 200, 'offer');
+      const coords = getCoordinates(index + 200);
       
       items.push({
         id: o.id,
