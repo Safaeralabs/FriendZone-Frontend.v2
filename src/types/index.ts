@@ -10,7 +10,7 @@ export interface Hangout {
   title: string;
   description: string;
   vibe: string[];
-  time: string; // ISO datetime
+  time: string;
   capacity: number;
   spotsLeft: number;
   hostId: string;
@@ -61,6 +61,14 @@ export interface Offer {
   tags: string[];
 }
 
+// User Profile Ambition (simple display)
+export interface UserAmbitionDisplay {
+  id: string;
+  text: string;
+  icon: string;
+  expiresAt?: string;
+}
+
 export interface UserProfile {
   id: string;
   name: string;
@@ -69,7 +77,7 @@ export interface UserProfile {
   vibe: string[];
   languages: string[];
   availability: string[];
-  ambitions: Ambition[];
+  ambitions: UserAmbitionDisplay[]; // Usa el tipo simple
   joinedDate: string;
 }
 
@@ -89,8 +97,7 @@ export interface Toast {
   duration?: number;
 }
 
-// ... existing types ...
-
+// Ambitions System (for matching)
 export type AmbitionIntent = 
   | 'coffee' | 'drinks' | 'clubbing' | 'gym' 
   | 'walk' | 'brunch' | 'lunch' | 'dinner' 
@@ -106,7 +113,7 @@ export interface Ambition {
   userName: string;
   intent: AmbitionIntent;
   timeWindow: AmbitionTimeWindow;
-  customTime?: string; // ISO datetime if custom
+  customTime?: string;
   vibe: AmbitionVibe;
   area?: string;
   groupSize?: { min: number; max: number };
@@ -119,7 +126,7 @@ export interface AmbitionMatch {
   id: string;
   ambitions: Ambition[];
   status: 'pending' | 'accepted' | 'declined' | 'hangout_created';
-  hangoutId?: string; // If hangout was created
+  hangoutId?: string;
   createdAt: string;
   expiresAt: string;
 }
