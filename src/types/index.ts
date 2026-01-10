@@ -61,26 +61,6 @@ export interface Offer {
   tags: string[];
 }
 
-// User Profile Ambition (simple display)
-export interface UserAmbitionDisplay {
-  id: string;
-  text: string;
-  icon: string;
-  expiresAt?: string;
-}
-
-export interface UserProfile {
-  id: string;
-  name: string;
-  bio: string;
-  interests: string[];
-  vibe: string[];
-  languages: string[];
-  availability: string[];
-  ambitions: UserAmbitionDisplay[]; // Usa el tipo simple
-  joinedDate: string;
-}
-
 export interface JoinRequest {
   id: string;
   hangoutId: string;
@@ -97,7 +77,7 @@ export interface Toast {
   duration?: number;
 }
 
-// Ambitions System (for matching)
+// Ambitions System
 export type AmbitionIntent = 
   | 'coffee' | 'drinks' | 'clubbing' | 'gym' 
   | 'walk' | 'brunch' | 'lunch' | 'dinner' 
@@ -129,6 +109,26 @@ export interface AmbitionMatch {
   hangoutId?: string;
   createdAt: string;
   expiresAt: string;
+}
+
+// User Profile (separate from Ambition matching system)
+export interface UserAmbition {
+  id: string;
+  text: string;
+  icon: string;
+  expiresAt?: string;
+}
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  bio: string;
+  interests: string[];
+  vibe: string[];
+  languages: string[];
+  availability: string[];
+  ambitions: UserAmbition[];
+  joinedDate: string;
 }
 
 export interface MyPlan {
