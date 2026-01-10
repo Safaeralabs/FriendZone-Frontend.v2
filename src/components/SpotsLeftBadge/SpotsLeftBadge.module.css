@@ -1,0 +1,22 @@
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.badge.almostFull {
+  background-color: rgba(255, 149, 0, 0.1);
+  border-color: rgba(255, 149, 0, 0.3);
+  color: var(--color-warning);
+}
+
+.badge.full {
+  background-color: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: var(--color-text-tertiary);
+}

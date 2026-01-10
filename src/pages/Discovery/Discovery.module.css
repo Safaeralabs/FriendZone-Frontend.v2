@@ -1,0 +1,216 @@
+.page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: var(--color-background);
+}
+
+.header {
+  padding: var(--spacing-lg) var(--spacing-md) var(--spacing-sm);
+  text-align: center; /* CENTRADO */
+}
+
+.greeting {
+  font-size: 28px;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 4px;
+  color: var(--color-text-primary);
+  animation: fadeInDown 0.4s ease-out;
+}
+
+.location {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-normal);
+  animation: fadeInDown 0.4s ease-out 0.1s both;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.datePicker {
+  display: flex;
+  gap: 8px;
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  overflow-x: auto;
+  scrollbar-width: none;
+  animation: fadeIn 0.4s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.datePicker::-webkit-scrollbar {
+  display: none;
+}
+
+.dateBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  height: 64px;
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  border-radius: 12px;
+  padding: var(--spacing-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.dateBtn:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.dateBtn:active {
+  transform: translateY(0);
+}
+
+.dateBtn.selected {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(101, 39, 252, 0.2);
+  transform: scale(1.05);
+}
+
+.dateBtn.selected .dayLabel,
+.dateBtn.selected .dateLabel {
+  color: white;
+}
+
+.dayLabel {
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 4px;
+  transition: color 0.3s ease;
+}
+
+.dateLabel {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  transition: color 0.3s ease;
+}
+
+.section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: fadeInUp 0.4s ease-out 0.3s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.seeAll {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  transition: opacity 0.2s ease;
+}
+
+.seeAll:hover {
+  opacity: 0.7;
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 var(--spacing-md) var(--spacing-xl);
+}
+
+.fab {
+  position: fixed;
+  bottom: 120px; /* MÁS ARRIBA para no chocar con nav flotante */
+  right: var(--spacing-lg);
+  width: 56px;
+  height: 56px;
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(101, 39, 252, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: calc(var(--z-fixed) - 1); /* DEBAJO del nav pero visible */
+  animation: scaleIn 0.4s ease-out 0.5s both;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(101, 39, 252, 0.35);
+}
+
+.fab:active {
+  transform: scale(0.95);
+}
+
+.fabIcon {
+  font-size: 28px;
+  color: white;
+  font-weight: var(--font-weight-normal);
+  line-height: 1;
+}

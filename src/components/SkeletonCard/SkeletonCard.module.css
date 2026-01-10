@@ -1,0 +1,71 @@
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.04) 25%,
+    rgba(0, 0, 0, 0.08) 50%,
+    rgba(0, 0, 0, 0.04) 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.label {
+  width: 80px;
+  height: 20px;
+}
+
+.time {
+  width: 60px;
+  height: 20px;
+}
+
+.title {
+  width: 70%;
+  height: 24px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.description {
+  width: 100%;
+  height: 40px;
+  margin-bottom: var(--spacing-md);
+}
+
+.vibes {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.vibe {
+  width: 60px;
+  height: 24px;
+}
+
+.cta {
+  width: 100%;
+  height: 44px;
+}

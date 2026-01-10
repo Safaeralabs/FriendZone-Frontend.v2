@@ -1,0 +1,471 @@
+.page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--spacing-sm);
+  padding: 0 var(--spacing-md) var(--spacing-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+  transition: all 0.2s ease;
+}
+
+.tab.activeTab {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: var(--spacing-md);
+  padding-bottom: var(--spacing-2xl);
+}
+
+/* Ambition Card */
+.ambitionCard {
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: cardSlideIn 0.4s ease-out backwards;
+}
+
+.ambitionCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.intentBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background-color: rgba(101, 39, 252, 0.1);
+  border-radius: 20px;
+}
+
+.intentEmoji {
+  font-size: 18px;
+}
+
+.intentLabel {
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  text-transform: capitalize;
+}
+
+.timeRemaining {
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-tertiary);
+}
+
+.cardBody {
+  margin-bottom: 12px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.tag {
+  padding: 4px 10px;
+  background-color: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  text-transform: capitalize;
+}
+
+.groupSize {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.deleteBtn {
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-error);
+  padding: 4px 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.deleteBtn:hover {
+  background-color: rgba(255, 59, 48, 0.1);
+}
+
+/* Match Card */
+.matchCard {
+  background: linear-gradient(135deg, rgba(101, 39, 252, 0.05), rgba(101, 39, 252, 0.02));
+  border: 1px solid rgba(101, 39, 252, 0.2);
+  border-radius: 16px;
+  padding: 16px;
+  animation: cardSlideIn 0.4s ease-out backwards;
+}
+
+.matchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.matchBadge {
+  padding: 4px 12px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.matchTitle {
+  font-size: 17px;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 16px;
+  color: var(--color-text-primary);
+}
+
+.matchMembers {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.memberAvatar {
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-semibold);
+  font-size: 16px;
+}
+
+.memberName {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.matchActions {
+  display: flex;
+  gap: 8px;
+}
+
+.declineBtn,
+.acceptBtn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  transition: all 0.2s ease;
+}
+
+.declineBtn {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--color-text-secondary);
+}
+
+.declineBtn:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.acceptBtn {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.acceptBtn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Create Button */
+.createBtn {
+  position: fixed;
+  bottom: 100px;
+  right: var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 24px;
+  box-shadow: 0 4px 12px rgba(101, 39, 252, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: calc(var(--z-fixed) - 1);
+  animation: slideInRight 0.4s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.createBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(101, 39, 252, 0.4);
+}
+
+.createBtn:active {
+  transform: scale(0.95);
+}
+
+.createIcon {
+  font-size: 20px;
+}
+
+.createText {
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  z-index: var(--z-modal);
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal {
+  background-color: var(--color-surface);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  width: 100%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.modalTitle {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.modalClose {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--color-text-secondary);
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.modalClose:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.modalBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+}
+
+.section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.label {
+  display: block;
+  font-size: 15px;
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text-primary);
+}
+
+.intentGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.intentBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 8px;
+  background-color: var(--color-surface);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.intentBtn:hover {
+  border-color: rgba(0, 0, 0, 0.12);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.intentBtn.selected {
+  background-color: rgba(101, 39, 252, 0.1);
+  border-color: var(--color-primary);
+}
+
+.emoji {
+  font-size: 24px;
+}
+
+.text {
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.timeGrid,
+.vibeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.timeBtn,
+.vibeBtn {
+  padding: 12px;
+  background-color: var(--color-surface);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+}
+
+.timeBtn:hover,
+.vibeBtn:hover {
+  border-color: rgba(0, 0, 0, 0.12);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.timeBtn.selected,
+.vibeBtn.selected {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.modalFooter {
+  padding: var(--spacing-lg);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.submitBtn {
+  width: 100%;
+  padding: 16px;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 12px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  transition: background-color 0.2s ease;
+}
+
+.submitBtn:hover {
+  background-color: var(--color-primary-hover);
+}
+
+@keyframes cardSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

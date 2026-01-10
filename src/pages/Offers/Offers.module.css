@@ -1,0 +1,54 @@
+.page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+}
+
+.card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.cardTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-xs);
+}
+
+.cardVenue {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.cardTime {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--spacing-md);
+}
+
+.cardFooter {
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.hangoutCount {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+}
