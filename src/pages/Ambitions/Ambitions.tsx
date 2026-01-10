@@ -6,7 +6,7 @@ import { mockAmbitions, mockMatches } from '@/mock/ambitions';
 import styles from './Ambitions.module.css';
 
 const Ambitions: React.FC = () => {
-  const navigate = useNavigate();
+
   const [activeTab, setActiveTab] = useState<'active' | 'matches'>('active');
   const [showCreateModal, setShowCreateModal] = useState(false);
 
