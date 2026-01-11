@@ -8,16 +8,11 @@ const Plans: React.FC = () => {
   const navigate = useNavigate();
   const { hangouts, user } = useApp();
   const [activeTab, setActiveTab] = useState<'attending' | 'hosting'>('attending');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showSearch, setShowSearch] = useState(false);
 
-  // Filter hangouts by tab
   const filteredHangouts = hangouts.filter(h => {
     if (activeTab === 'attending') {
-      // Hangouts where user is participant (not host)
       return h.participants.some(p => p.id === user.id && p.status !== 'host');
     } else {
-      // Hangouts where user is host
       return h.hostId === user.id;
     }
   });
@@ -27,15 +22,11 @@ const Plans: React.FC = () => {
     const hangoutTime = new Date(hangout.time);
     const diff = hangoutTime.getTime() - now.getTime();
     const minutes = Math.floor(diff / (1000 * 60));
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
 
-    // Check if it's happening now (within 15 min window)
     if (Math.abs(minutes) <= 15) {
       return { label: 'LIVE', color: 'live', time: 'Now' };
     }
 
-    // Past
     if (diff < 0) {
       const absMinutes = Math.abs(minutes);
       if (absMinutes < 60) return { label: `${absMinutes}M AGO`, color: 'past', time: 'Past' };
@@ -43,13 +34,13 @@ const Plans: React.FC = () => {
       return { label: 'Yesterday', color: 'past', time: 'Past' };
     }
 
-    // Future
     if (minutes < 60) {
       return { label: `IN ${minutes}M`, color: 'soon', time: `In ${minutes}m` };
     }
-    if (hours < 24) {
-      return { label: `IN ${hours}H`, color: 'upcoming', time: `In ${hours}h` };
+    if (minutes < 1440) {
+      return { label: `IN ${Math.floor(minutes / 60)}H`, color: 'upcoming', time: `In ${Math.floor(minutes / 60)}h` };
     }
+    const days = Math.floor(minutes / 1440);
     if (days === 1) {
       return { label: 'TOMORROW', color: 'upcoming', time: 'Tomorrow' };
     }
@@ -57,7 +48,6 @@ const Plans: React.FC = () => {
   };
 
   const getLastMessage = (hangout: Hangout) => {
-    // Mock last message - in real app, this would come from chat
     const messages = [
       `${hangout.hostName}: Just arrived at the cafe!`,
       `${hangout.hostName}: Running 5 min late`,
@@ -69,8 +59,6 @@ const Plans: React.FC = () => {
   };
 
   const getHangoutImage = (hangout: Hangout) => {
-    // In real app, this would be actual images
-    // For now, return a gradient based on hangout type
     const gradients = {
       community: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       offer: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
@@ -79,40 +67,33 @@ const Plans: React.FC = () => {
     return gradients[hangout.type];
   };
 
+  const upcomingCount = hangouts.filter(h => {
+    const time = new Date(h.time);
+    return time > new Date() && h.participants.some(p => p.id === user.id);
+  }).length;
+
   return (
     <div className={styles.page}>
-      {/* Header */}
-      <div className={styles.header}>
-        <button 
-          className={styles.searchBtn}
-          onClick={() => setShowSearch(!showSearch)}
-        >
-          🔍
-        </button>
-        <h1 className={styles.title}>Hangouts</h1>
-        <button 
-          className={styles.addBtn}
-          onClick={() => navigate('/create')}
-        >
-          +
-        </button>
+      {/* New Hero Header */}
+      <div className={styles.heroHeader}>
+        <div className={styles.headerTop}>
+          <button className={styles.iconBtn} onClick={() => navigate('/')}>
+            🏠
+          </button>
+          <div className={styles.liveBadge}>
+            <span className={styles.liveDot}></span>
+            <span className={styles.liveText}>{upcomingCount} UPCOMING</span>
+          </div>
+          <button className={styles.iconBtn}>
+            🔍
+          </button>
+        </div>
+        <h1 className={styles.heroTitle}>
+          Your <span className={styles.highlight}>hangouts</span>
+        </h1>
+        <p className={styles.heroSubtitle}>TRACK ALL YOUR PLANS</p>
       </div>
 
-      {/* Search Bar (collapsible) */}
-      {showSearch && (
-        <div className={styles.searchBar}>
-          <input
-            type="text"
-            className={styles.searchInput}
-            placeholder="Search hangouts..."
-            value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)}
-            autoFocus
-          />
-        </div>
-      )}
-
-      {/* Tabs */}
       <div className={styles.tabs}>
         <button
           className={`${styles.tab} ${activeTab === 'attending' ? styles.activeTab : ''}`}
@@ -128,7 +109,6 @@ const Plans: React.FC = () => {
         </button>
       </div>
 
-      {/* Hangouts List */}
       <div className={styles.content}>
         {filteredHangouts.length === 0 ? (
           <div className={styles.empty}>
@@ -147,7 +127,7 @@ const Plans: React.FC = () => {
             {filteredHangouts.map((hangout, index) => {
               const status = getTimeStatus(hangout);
               const lastMessage = getLastMessage(hangout);
-              const hasNewMessages = Math.random() > 0.5; // Mock
+              const hasNewMessages = Math.random() > 0.5;
 
               return (
                 <div
@@ -156,25 +136,23 @@ const Plans: React.FC = () => {
                   onClick={() => navigate(`/hangouts/${hangout.id}`)}
                   style={{ animationDelay: `${index * 0.05}s` }}
                 >
-                  {/* Hangout Image */}
                   <div 
                     className={styles.hangoutImage}
                     style={{ background: getHangoutImage(hangout) }}
                   >
                     {status.color === 'live' && (
                       <div className={styles.liveIndicator}>
-                        <span className={styles.liveDot}></span>
+                        <span className={styles.liveDot2}></span>
                       </div>
                     )}
                   </div>
 
-                  {/* Content */}
                   <div className={styles.hangoutContent}>
                     <div className={styles.hangoutHeader}>
                       <div className={styles.hangoutTitleRow}>
                         <h3 className={styles.hangoutTitle}>{hangout.title}</h3>
                         {status.color === 'live' && (
-                          <span className={styles.liveBadge}>LIVE</span>
+                          <span className={styles.liveBadge2}>LIVE</span>
                         )}
                       </div>
                       <span className={`${styles.timeBadge} ${styles[status.color]}`}>
@@ -187,13 +165,11 @@ const Plans: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* New message indicator */}
                   {hasNewMessages && <div className={styles.unreadDot}></div>}
                 </div>
               );
             })}
 
-            {/* End of list */}
             <div className={styles.endOfList}>
               <div className={styles.endIcon}>🎊</div>
               <p className={styles.endText}>END OF INBOX</p>
@@ -202,7 +178,6 @@ const Plans: React.FC = () => {
         )}
       </div>
 
-      {/* FAB - Create Hangout */}
       <button 
         className={styles.fab}
         onClick={() => navigate('/create')}

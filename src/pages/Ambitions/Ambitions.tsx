@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import TopBar from '@/components/TopBar/TopBar';
 import { AmbitionIntent, AmbitionTimeWindow, AmbitionVibe } from '@/types';
 import { mockAmbitions, mockMatches } from '@/mock/ambitions';
 import styles from './Ambitions.module.css';
 
 const Ambitions: React.FC = () => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'active' | 'matches'>('active');
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  // Create ambition state
   const [intent, setIntent] = useState<AmbitionIntent>('coffee');
   const [timeWindow, setTimeWindow] = useState<AmbitionTimeWindow>('now');
   const [vibe, setVibe] = useState<AmbitionVibe>('chill');
@@ -42,7 +39,6 @@ const Ambitions: React.FC = () => {
   ];
 
   const handleCreateAmbition = () => {
-    // TODO: Create ambition via API
     console.log('Creating ambition:', { intent, timeWindow, vibe });
     setShowCreateModal(false);
   };
@@ -64,10 +60,25 @@ const Ambitions: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      <TopBar 
-        title="Ambitions" 
-        subtitle="Quick social signals"
-      />
+      {/* New Hero Header */}
+      <div className={styles.heroHeader}>
+        <div className={styles.headerTop}>
+          <button className={styles.iconBtn}>
+            👤
+          </button>
+          <div className={styles.liveBadge}>
+            <span className={styles.liveDot}></span>
+            <span className={styles.liveText}>{mockAmbitions.length} LIVE NOW</span>
+          </div>
+          <button className={styles.iconBtn}>
+            🔔
+          </button>
+        </div>
+        <h1 className={styles.heroTitle}>
+          What's the <span className={styles.highlight}>move?</span>
+        </h1>
+        <p className={styles.heroSubtitle}>PICK A SIGNAL TO BROADCAST</p>
+      </div>
 
       <div className={styles.tabs}>
         <button
@@ -155,13 +166,11 @@ const Ambitions: React.FC = () => {
         )}
       </div>
 
-      {/* Create Ambition Button */}
       <button className={styles.createBtn} onClick={() => setShowCreateModal(true)}>
         <span className={styles.createIcon}>⚡</span>
         <span className={styles.createText}>New Ambition</span>
       </button>
 
-      {/* Create Modal */}
       {showCreateModal && (
         <div className={styles.modalOverlay} onClick={() => setShowCreateModal(false)}>
           <div className={styles.modal} onClick={e => e.stopPropagation()}>

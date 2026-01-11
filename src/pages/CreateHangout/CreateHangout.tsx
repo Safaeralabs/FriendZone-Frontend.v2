@@ -11,27 +11,34 @@ const CreateHangout: React.FC = () => {
   const { showToast } = useToast();
   
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [type, setType] = useState<'community' | 'offer' | 'event-linked'>('community');
-  const [time, setTime] = useState('');
+  const [selectedVibe, setSelectedVibe] = useState('Active');
+  const [date, setDate] = useState('2024-10-14');
+  const [time, setTime] = useState('18:30');
   const [capacity, setCapacity] = useState(4);
+  const [visibility, setVisibility] = useState<'friends' | 'public'>('friends');
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const vibes = ['Active', 'Chill', 'Foodie', 'Night Out', 'Creative'];
+
+  const handleSubmit = () => {
+    if (!title.trim()) {
+      showToast('Please add a title for your hangout', 'error');
+      return;
+    }
 
     const newHangout: Hangout = {
       id: `hangout-${Date.now()}`,
-      type,
-      title,
-      description,
-      vibe: ['Chill', 'Friendly'],
-      time: new Date(time).toISOString(),
+      type: 'community',
+      title: title.trim(),
+      description: title.trim(),
+      vibe: [selectedVibe],
+      time: new Date(`${date}T${time}`).toISOString(),
       capacity,
       spotsLeft: capacity - 1,
       hostId: user.id,
       hostName: user.name,
       locationLocked: true,
-      visibility: 'public',
+      visibility: visibility === 'public' ? 'public' : 'invite-only',
       plan: ['Meet up', 'Hang out', 'Have fun'],
       groupTags: user.interests.slice(0, 3),
       languages: user.languages,
@@ -45,94 +52,164 @@ const CreateHangout: React.FC = () => {
     navigate('/');
   };
 
+  const incrementCapacity = () => {
+    if (capacity < 20) setCapacity(capacity + 1);
+  };
+
+  const decrementCapacity = () => {
+    if (capacity > 2) setCapacity(capacity - 1);
+  };
+
   return (
     <div className={styles.page}>
+      {/* Header */}
       <div className={styles.header}>
-        <button className={styles.cancel} onClick={() => navigate(-1)}>Cancel</button>
-        <h1 className={styles.title}>Create Hangout</h1>
-        <div style={{ width: 60 }}></div>
+        <button className={styles.cancelBtn} onClick={() => navigate(-1)}>
+          Cancel
+        </button>
+        <h1 className={styles.title}>Create a Hangout</h1>
+        <button className={styles.postBtn} onClick={handleSubmit}>
+          Post
+        </button>
       </div>
 
-      <form className={styles.form} onSubmit={handleSubmit}>
-        <div className={styles.field}>
-          <label className={styles.label}>Title</label>
-          <input
-            type="text"
-            className={styles.input}
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            placeholder="What's the plan?"
-            required
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label className={styles.label}>Description</label>
+      <div className={styles.content}>
+        {/* Main Input */}
+        <div className={styles.mainSection}>
           <textarea
-            className={styles.textarea}
-            value={description}
-            onChange={e => setDescription(e.target.value)}
-            placeholder="Give a bit more context..."
-            rows={4}
-            required
+            className={styles.mainInput}
+            placeholder="What's the plan?"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            maxLength={100}
+            rows={3}
           />
+          <p className={styles.placeholder}>
+            e.g., Sunset hike at the park or coffee and conversing...
+          </p>
         </div>
 
-        <div className={styles.field}>
-          <label className={styles.label}>Type</label>
-          <div className={styles.typeButtons}>
-            <button
-              type="button"
-              className={`${styles.typeBtn} ${type === 'community' ? styles.active : ''}`}
-              onClick={() => setType('community')}
-            >
-              Community
-            </button>
-            <button
-              type="button"
-              className={`${styles.typeBtn} ${type === 'offer' ? styles.active : ''}`}
-              onClick={() => setType('offer')}
-            >
-              Venue Offer
-            </button>
-            <button
-              type="button"
-              className={`${styles.typeBtn} ${type === 'event-linked' ? styles.active : ''}`}
-              onClick={() => setType('event-linked')}
-            >
-              Event Group
-            </button>
+        {/* The Vibe */}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>THE VIBE</h3>
+          <div className={styles.vibeGrid}>
+            {vibes.map((vibe) => (
+              <button
+                key={vibe}
+                className={`${styles.vibeChip} ${selectedVibe === vibe ? styles.selected : ''}`}
+                onClick={() => setSelectedVibe(vibe)}
+              >
+                {vibe}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div className={styles.field}>
-          <label className={styles.label}>When</label>
-          <input
-            type="datetime-local"
-            className={styles.input}
-            value={time}
-            onChange={e => setTime(e.target.value)}
-            required
-          />
+        {/* When */}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>WHEN</h3>
+          <div className={styles.whenGrid}>
+            <div className={styles.whenItem}>
+              <div className={styles.whenIcon}>📅</div>
+              <div className={styles.whenInfo}>
+                <span className={styles.whenLabel}>Date</span>
+                <input
+                  type="date"
+                  className={styles.whenValue}
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </div>
+            </div>
+            <div className={styles.whenItem}>
+              <div className={styles.whenIcon}>🕐</div>
+              <div className={styles.whenInfo}>
+                <span className={styles.whenLabel}>Time</span>
+                <input
+                  type="time"
+                  className={styles.whenValue}
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className={styles.field}>
-          <label className={styles.label}>Group size</label>
-          <input
-            type="number"
-            className={styles.input}
-            value={capacity}
-            onChange={e => setCapacity(parseInt(e.target.value))}
-            min="2"
-            max="20"
-            required
-          />
+        {/* Who & How */}
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>WHO & HOW</h3>
+          
+          {/* Capacity */}
+          <div className={styles.capacityRow}>
+            <div className={styles.capacityLabel}>
+              <span className={styles.capacityIcon}>👥</span>
+              <span>Capacity</span>
+            </div>
+            <div className={styles.capacityControl}>
+              <button 
+                className={styles.capacityBtn}
+                onClick={decrementCapacity}
+                disabled={capacity <= 2}
+              >
+                −
+              </button>
+              <span className={styles.capacityValue}>{capacity}</span>
+              <button 
+                className={styles.capacityBtn}
+                onClick={incrementCapacity}
+                disabled={capacity >= 20}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* Visibility */}
+          <div className={styles.visibilityRow}>
+            <div className={styles.visibilityLabel}>
+              <span className={styles.visibilityIcon}>👁️</span>
+              <span>Visibility</span>
+            </div>
+            <div className={styles.visibilityToggle}>
+              <button
+                className={`${styles.visibilityBtn} ${visibility === 'friends' ? styles.active : ''}`}
+                onClick={() => setVisibility('friends')}
+              >
+                Friends
+              </button>
+              <button
+                className={`${styles.visibilityBtn} ${visibility === 'public' ? styles.active : ''}`}
+                onClick={() => setVisibility('public')}
+              >
+                Public
+              </button>
+            </div>
+          </div>
         </div>
 
-        <button type="submit" className={styles.submit}>
-          Create Hangout
+        {/* Post Button */}
+        <button className={styles.submitBtn} onClick={handleSubmit}>
+          Post Hangout
         </button>
-      </form>
+
+        {/* Location Picker */}
+        <div className={styles.locationSection}>
+          <button 
+            className={styles.locationBtn}
+            onClick={() => setShowLocationPicker(!showLocationPicker)}
+          >
+            <span className={styles.locationIcon}>📍</span>
+            Add Location
+          </button>
+          {showLocationPicker && (
+            <div className={styles.mapPlaceholder}>
+              <p className={styles.mapText}>Map integration coming soon</p>
+              <p className={styles.mapSubtext}>Location will be shared after approval</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

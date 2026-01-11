@@ -10,7 +10,6 @@ const Discovery: React.FC = () => {
   const { hangouts, user } = useApp();
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-  // Generate week days
   const weekDays = useMemo(() => {
     const days = [];
     const today = new Date();
@@ -21,6 +20,14 @@ const Discovery: React.FC = () => {
     }
     return days;
   }, []);
+
+  // Check if a date has hangouts
+  const hasHangouts = (date: Date) => {
+    return hangouts.some(h => {
+      const hangoutDate = new Date(h.time);
+      return hangoutDate.toDateString() === date.toDateString();
+    });
+  };
 
   const filteredHangouts = useMemo(() => {
     return hangouts.filter(h => {
@@ -48,12 +55,36 @@ const Discovery: React.FC = () => {
     return date.toDateString() === new Date().toDateString();
   };
 
+  const friendsOut = 12;
+  const nearbyHangouts = filteredHangouts.length;
+
   return (
     <div className={styles.page}>
-      {/* Header with greeting */}
+      {/* Top Icons */}
+      <div className={styles.topIcons}>
+        <button className={styles.iconBtn} onClick={() => navigate('/profile')}>
+          <div className={styles.avatar}>
+            {user.name.split(' ').map(n => n[0]).join('')}
+          </div>
+        </button>
+        <button className={styles.iconBtn} onClick={() => navigate('/plans')}>
+          📋
+        </button>
+      </div>
+
+      {/* Header */}
       <div className={styles.header}>
+        <div className={styles.locationTime}>
+          <span className={styles.sunIcon}>☀️</span>
+          <span className={styles.locationText}>NEW YORK • {getCurrentTime()}</span>
+        </div>
         <h1 className={styles.greeting}>Hello {user.name.split(' ')[0]}</h1>
-        <p className={styles.location}>New York, {getCurrentTime()}</p>
+        <div className={styles.statsCard}>
+          <span className={styles.pulseDot}></span>
+          <span className={styles.statsText}>
+            {friendsOut} friends are out <span className={styles.separator}>•</span> {nearbyHangouts} hangouts near you
+          </span>
+        </div>
       </div>
 
       {/* Date picker */}
@@ -62,26 +93,26 @@ const Discovery: React.FC = () => {
           const { day, date: dateNum } = formatDate(date);
           const selected = date.toDateString() === selectedDate.toDateString();
           const today = isToday(date);
+          const hasEvents = hasHangouts(date);
 
           return (
             <button
               key={index}
-              className={`${styles.dateBtn} ${selected ? styles.selected : ''} ${
-                today ? styles.today : ''
-              }`}
+              className={`${styles.dateBtn} ${selected ? styles.selected : ''}`}
               onClick={() => setSelectedDate(date)}
             >
               <span className={styles.dayLabel}>{day}</span>
               <span className={styles.dateLabel}>{dateNum}</span>
+              {hasEvents && <span className={styles.eventDot}></span>}
             </button>
           );
         })}
       </div>
 
-      {/* Happening Today section */}
+      {/* Section */}
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.sectionTitle}>Happening Today</h2>
+          <h2 className={styles.sectionTitle}>HAPPENING TODAY</h2>
           <button className={styles.seeAll}>See all</button>
         </div>
 

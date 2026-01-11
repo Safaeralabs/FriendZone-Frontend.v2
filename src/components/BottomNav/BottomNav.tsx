@@ -4,12 +4,11 @@ import styles from './BottomNav.module.css';
 
 const BottomNav: React.FC = () => {
   const navItems = [
-    { to: '/', label: 'Home', icon: '🌊' },
     { to: '/ambitions', label: 'Ambitions', icon: '⚡' },
-    { to: '/plans', label: 'Plans', icon: '📋' },
-    { to: '/maps', label: 'Maps', icon: '🗺️' }, // CAMBIAR de /events a /maps
-    { to: '/profile', label: 'Perfil', icon: '😊' },
+    { to: '/', label: 'Hangouts', icon: '🏠', isMain: true }, // Cambio aquí
+    { to: '/maps', label: 'Maps', icon: '🗺️' },
   ];
+
   return (
     <nav className={styles.navContainer}>
       <div className={styles.nav}>
@@ -18,7 +17,7 @@ const BottomNav: React.FC = () => {
             key={item.to}
             to={item.to}
             className={({ isActive }) =>
-              `${styles.navItem} ${isActive ? styles.active : ''}`
+              `${styles.navItem} ${isActive ? styles.active : ''} ${item.isMain ? styles.mainItem : ''}`
             }
             end
           >

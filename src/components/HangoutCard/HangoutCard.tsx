@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Hangout } from '@/types';
-import AvatarStack from '@/components/AvatarStack/AvatarStack';
 import styles from './HangoutCard.module.css';
 
 interface HangoutCardProps {
@@ -12,77 +11,112 @@ const HangoutCard: React.FC<HangoutCardProps> = ({ hangout }) => {
   const navigate = useNavigate();
 
   const getTypeBadge = () => {
-    switch (hangout.type) {
-      case 'offer':
-        return { label: hangout.vibe[0]?.toUpperCase() || 'FOOD', color: 'primary' };
-      case 'event-linked':
-        return { label: 'LIVE MUSIC', color: 'primary' };
-      default:
-        return { label: hangout.vibe[0]?.toUpperCase() || 'COFFEE', color: 'primary' };
+    if (hangout.type === 'offer') {
+      return { label: 'VENUE OFFER', color: 'success' };
+    } else if (hangout.eventId) {
+      return { label: 'EVENT HANGOUT', color: 'warning' };
+    } else if (hangout.type === 'event-linked') {
+      return { label: 'EVENT', color: 'warning' };
+    } else {
+      return { label: 'HANGOUT', color: 'primary' };
     }
   };
 
-  const getStatusBadge = () => {
-    if (hangout.spotsLeft === 0) return { label: 'FULL', color: 'tertiary' };
-    if (hangout.type === 'offer') return { label: 'OPEN', color: 'success' };
-    return { label: `${hangout.spotsLeft} SPOTS LEFT`, color: 'warning' };
+  const getSpotsBadge = () => {
+    if (hangout.spotsLeft === 0) {
+      return { label: 'FULL', color: 'gray' };
+    } else if (hangout.spotsLeft <= 2) {
+      return { label: `${hangout.spotsLeft} SPOTS LEFT`, color: 'orange' };
+    } else {
+      return { label: `${hangout.spotsLeft} SPOTS LEFT`, color: 'green' };
+    }
   };
 
-  const getTimeString = () => {
-    const time = new Date(hangout.time);
-    return time.toLocaleTimeString('en-US', {
-      hour: '2-digit',
+  const getTimeRemaining = () => {
+    const now = new Date();
+    const hangoutTime = new Date(hangout.time);
+    const diff = hangoutTime.getTime() - now.getTime();
+    
+    if (diff < 0) return null; // Past event
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (hours > 24) {
+      const days = Math.floor(hours / 24);
+      return `${days}d`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else {
+      return `${minutes}m`;
+    }
+  };
+
+  const getTime = () => {
+    const date = new Date(hangout.time);
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
       minute: '2-digit',
       hour12: true,
     });
   };
 
-  const getLocationString = () => {
-    if (hangout.location) {
-      const parts = hangout.location.address.split(',');
-      return parts[parts.length - 2]?.trim().toUpperCase() || 'NYC';
-    }
-    return 'TBD';
+  const getLocation = () => {
+    if (!hangout.location) return 'TBD';
+    const parts = hangout.location.address.split(',');
+    return parts.slice(-2).join(',').trim();
   };
 
   const typeBadge = getTypeBadge();
-  const statusBadge = getStatusBadge();
-
-  const handleMenuClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    // Aquí irían las opciones del menú
-    console.log('Menu clicked for', hangout.id);
-  };
+  const spotsBadge = getSpotsBadge();
+  const timeRemaining = getTimeRemaining();
 
   return (
-    <div className={styles.card} onClick={() => navigate(`/hangouts/${hangout.id}`)}>
+    <div
+      className={styles.card}
+      onClick={() => navigate(`/hangouts/${hangout.id}`)}
+    >
+      {/* Time Remaining - Large Background */}
+      {timeRemaining && (
+        <div className={styles.timeRemainingBg}>
+          {timeRemaining}
+        </div>
+      )}
+
+      {/* Header with badges */}
       <div className={styles.header}>
         <div className={styles.badges}>
           <span className={`${styles.badge} ${styles[typeBadge.color]}`}>
             {typeBadge.label}
           </span>
-          <span className={`${styles.badge} ${styles[statusBadge.color]}`}>
-            {statusBadge.label}
+          <span className={`${styles.badge} ${styles[spotsBadge.color]}`}>
+            {spotsBadge.label}
           </span>
         </div>
-        <button className={styles.menu} onClick={handleMenuClick}>
-          <span className={styles.menuDots}>⋮</span>
-        </button>
+        <button className={styles.menuBtn}>⋮</button>
       </div>
 
+      {/* Title & Description */}
       <h3 className={styles.title}>{hangout.title}</h3>
       <p className={styles.description}>{hangout.description}</p>
 
+      {/* Footer */}
       <div className={styles.footer}>
-        <div className={styles.participants}>
-          <AvatarStack participants={hangout.participants} size="sm" maxDisplay={2} />
-          {hangout.participants.length > 2 && (
-            <span className={styles.moreCount}>+{hangout.participants.length - 2}</span>
+        <div className={styles.avatarStack}>
+          {hangout.participants.slice(0, 3).map((participant, index) => (
+            <div key={participant.id} className={styles.avatar} style={{ zIndex: 3 - index }}>
+              {participant.name.charAt(0)}
+            </div>
+          ))}
+          {hangout.participants.length > 3 && (
+            <div className={styles.avatarMore}>
+              +{hangout.participants.length - 3}
+            </div>
           )}
         </div>
-        <div className={styles.meta}>
-          <span className={styles.time}>{getTimeString()}</span>
-          <span className={styles.location}>{getLocationString()}</span>
+        <div className={styles.timeLocation}>
+          <p className={styles.time}>{getTime()}</p>
+          <p className={styles.location}>{getLocation()}</p>
         </div>
       </div>
     </div>

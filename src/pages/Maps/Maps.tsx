@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Tooltip } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
 import L from 'leaflet';
@@ -29,7 +29,6 @@ interface MapItem {
   data: any;
 }
 
-// Map tile configurations
 const MAP_TILES = {
   light: {
     url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
@@ -49,7 +48,6 @@ const MAP_TILES = {
   },
 };
 
-// Custom marker icons
 const createCustomIcon = (type: 'hangout' | 'event' | 'offer', isToday: boolean) => {
   const colors = {
     hangout: '#6527fc',
@@ -111,10 +109,9 @@ const Maps: React.FC = () => {
   const navigate = useNavigate();
   const { hangouts, events, offers } = useApp();
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [mapStyle, setMapStyle] = useState<MapStyle>('light'); // Change this to switch styles
+  const [mapStyle, setMapStyle] = useState<MapStyle>('light');
 
-  // Mock coordinates
-  const getCoordinates = (index: number, type: string) => {
+  const getCoordinates = () => {
     const baseLat = 37.7749;
     const baseLng = -122.4194;
     return {
@@ -123,14 +120,13 @@ const Maps: React.FC = () => {
     };
   };
 
-  // Convert all items to map markers
   const mapItems = useMemo(() => {
     const items: MapItem[] = [];
 
-    hangouts.forEach((h, index) => {
+    hangouts.forEach((h) => {
       const hangoutTime = new Date(h.time);
       const isToday = hangoutTime.toDateString() === new Date().toDateString();
-      const coords = getCoordinates(index, 'hangout');
+      const coords = getCoordinates();
       
       items.push({
         id: h.id,
@@ -145,10 +141,10 @@ const Maps: React.FC = () => {
       });
     });
 
-    events.forEach((e, index) => {
+    events.forEach((e) => {
       const eventTime = new Date(e.time);
       const isToday = eventTime.toDateString() === new Date().toDateString();
-      const coords = getCoordinates(index + 100, 'event');
+      const coords = getCoordinates();
       
       items.push({
         id: e.id,
@@ -163,8 +159,8 @@ const Maps: React.FC = () => {
       });
     });
 
-    offers.forEach((o, index) => {
-      const coords = getCoordinates(index + 200, 'offer');
+    offers.forEach((o) => {
+      const coords = getCoordinates();
       
       items.push({
         id: o.id,
@@ -179,9 +175,9 @@ const Maps: React.FC = () => {
     });
 
     return items;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hangouts, events, offers]);
 
-  // Filter items
   const filteredItems = useMemo(() => {
     if (activeFilter === 'all') return mapItems;
     
@@ -227,19 +223,27 @@ const Maps: React.FC = () => {
 
   return (
     <div className={styles.page}>
-      {/* Header */}
-      <div className={styles.header}>
-        <h1 className={styles.title}>Maps</h1>
-        <p className={styles.subtitle}>{filteredItems.length} nearby</p>
-      </div>
-
-      {/* Today Banner */}
-      {todayCount > 0 && (
-        <div className={styles.todayBanner}>
-          <span className={styles.todayPulse}></span>
-          <span className={styles.todayText}>{todayCount} happening today</span>
+      {/* New Hero Header */}
+      <div className={styles.heroHeader}>
+        <div className={styles.headerTop}>
+          <button className={styles.iconBtn} onClick={() => navigate('/')}>
+            🏠
+          </button>
+          {todayCount > 0 && (
+            <div className={styles.liveBadge}>
+              <span className={styles.liveDot}></span>
+              <span className={styles.liveText}>{todayCount} TODAY</span>
+            </div>
+          )}
+          <button className={styles.iconBtn}>
+            📍
+          </button>
         </div>
-      )}
+        <h1 className={styles.heroTitle}>
+          Explore <span className={styles.highlight}>nearby</span>
+        </h1>
+        <p className={styles.heroSubtitle}>DISCOVER HANGOUTS AROUND YOU</p>
+      </div>
 
       {/* Filters */}
       <div className={styles.filters}>
@@ -324,49 +328,10 @@ const Maps: React.FC = () => {
           })}
         </MapContainer>
 
-        {/* Zoom Controls */}
-        <div className={styles.mapControls}>
-          <button className={styles.zoomBtn}>+</button>
-          <button className={styles.zoomBtn}>−</button>
-        </div>
 
-        {/* Map Style Selector */}
-        <div className={styles.styleSelector}>
-          <button
-            className={`${styles.styleBtn} ${mapStyle === 'light' ? styles.activeStyle : ''}`}
-            onClick={() => setMapStyle('light')}
-            title="Light"
-          >
-            ☀️
-          </button>
-          <button
-            className={`${styles.styleBtn} ${mapStyle === 'minimal' ? styles.activeStyle : ''}`}
-            onClick={() => setMapStyle('minimal')}
-            title="Minimal"
-          >
-            ◯
-          </button>
-          <button
-            className={`${styles.styleBtn} ${mapStyle === 'streets' ? styles.activeStyle : ''}`}
-            onClick={() => setMapStyle('streets')}
-            title="Streets"
-          >
-            🗺️
-          </button>
-          <button
-            className={`${styles.styleBtn} ${mapStyle === 'dark' ? styles.activeStyle : ''}`}
-            onClick={() => setMapStyle('dark')}
-            title="Dark"
-          >
-            🌙
-          </button>
-        </div>
       </div>
 
-      {/* FAB */}
-      <button className={styles.fab} onClick={() => navigate('/create')}>
-        <span className={styles.fabIcon}>+</span>
-      </button>
+   
     </div>
   );
 };
