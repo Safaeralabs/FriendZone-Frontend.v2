@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import TopBar from '@/components/TopBar/TopBar';
 import { AmbitionIntent, AmbitionTimeWindow, AmbitionVibe } from '@/types';
 import { mockAmbitions, mockMatches } from '@/mock/ambitions';
 import styles from './Ambitions.module.css';

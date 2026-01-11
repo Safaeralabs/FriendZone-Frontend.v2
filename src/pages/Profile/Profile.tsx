@@ -5,7 +5,7 @@ import styles from './Profile.module.css';
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
-  const { user, hangouts } = useApp();
+  const { user } = useApp();
 
   // Mock stats
   const stats = {

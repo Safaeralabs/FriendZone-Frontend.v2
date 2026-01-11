@@ -92,13 +92,13 @@ const Discovery: React.FC = () => {
         {weekDays.map((date, index) => {
           const { day, date: dateNum } = formatDate(date);
           const selected = date.toDateString() === selectedDate.toDateString();
-          const today = isToday(date);
+          const isTodayFlag = isToday(date);
           const hasEvents = hasHangouts(date);
 
           return (
             <button
               key={index}
-              className={`${styles.dateBtn} ${selected ? styles.selected : ''}`}
+              className={`${styles.dateBtn} ${selected ? styles.selected : ''} ${isTodayFlag ? styles.today : ''}`}
               onClick={() => setSelectedDate(date)}
             >
               <span className={styles.dayLabel}>{day}</span>
