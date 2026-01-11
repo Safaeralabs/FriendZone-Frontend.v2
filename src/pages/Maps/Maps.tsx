@@ -111,7 +111,8 @@ const Maps: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [mapStyle, setMapStyle] = useState<MapStyle>('light');
 
-  const getCoordinates = () => {
+  // Mock coordinates
+  const getCoordinates = (index: number) => {
     const baseLat = 37.7749;
     const baseLng = -122.4194;
     return {
@@ -123,10 +124,11 @@ const Maps: React.FC = () => {
   const mapItems = useMemo(() => {
     const items: MapItem[] = [];
 
-    hangouts.forEach((h) => {
+    // Add hangouts
+    hangouts.forEach((h, index) => {
       const hangoutTime = new Date(h.time);
       const isToday = hangoutTime.toDateString() === new Date().toDateString();
-      const coords = getCoordinates();
+      const coords = getCoordinates(index);
       
       items.push({
         id: h.id,
@@ -141,10 +143,11 @@ const Maps: React.FC = () => {
       });
     });
 
-    events.forEach((e) => {
+    // Add events
+    events.forEach((e, index) => {
       const eventTime = new Date(e.time);
       const isToday = eventTime.toDateString() === new Date().toDateString();
-      const coords = getCoordinates();
+      const coords = getCoordinates(index + 100);
       
       items.push({
         id: e.id,
@@ -159,8 +162,9 @@ const Maps: React.FC = () => {
       });
     });
 
-    offers.forEach((o) => {
-      const coords = getCoordinates();
+    // Add offers
+    offers.forEach((o, index) => {
+      const coords = getCoordinates(index + 200);
       
       items.push({
         id: o.id,
