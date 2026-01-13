@@ -50,18 +50,7 @@ const Ambitions: React.FC = () => {
     <div className={styles.page}>
       {/* Header Original */}
       <div className={styles.heroHeader}>
-        <div className={styles.headerTop}>
-          <button className={styles.iconBtn} onClick={() => navigate('/')}>
-            👤
-          </button>
-          <div className={styles.liveBadge}>
-            <span className={styles.liveDot}></span>
-            <span className={styles.liveText}>{mockAmbitions.length} LIVE NOW</span>
-          </div>
-          <button className={styles.iconBtn}>
-            🔔
-          </button>
-        </div>
+        
         <h1 className={styles.heroTitle}>
           What's the <span className={styles.highlight}>move?</span>
         </h1>
