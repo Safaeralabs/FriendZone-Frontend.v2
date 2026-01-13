@@ -39,18 +39,7 @@ const Profile: React.FC = () => {
     <div className={styles.page}>
       {/* New Header */}
       <div className={styles.heroHeader}>
-        <div className={styles.headerTop}>
-          <button className={styles.iconBtn} onClick={() => navigate('/')}>
-            🏠
-          </button>
-          <div className={styles.liveBadge}>
-            <span className={styles.liveDot}></span>
-            <span className={styles.liveText}>{stats.hangoutsAttended} HANGOUTS</span>
-          </div>
-          <button className={styles.iconBtn}>
-            ⚙️
-          </button>
-        </div>
+       
         <h1 className={styles.heroTitle}>
           Your social <span className={styles.highlight}>passport</span>
         </h1>

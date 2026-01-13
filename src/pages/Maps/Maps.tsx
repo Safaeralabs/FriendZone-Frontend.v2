@@ -229,20 +229,7 @@ const Maps: React.FC = () => {
         <div className={styles.page}>
             {/* New Hero Header */}
             <div className={styles.heroHeader}>
-                <div className={styles.headerTop}>
-                    <button className={styles.iconBtn} onClick={() => navigate('/')}>
-                        🏠
-                    </button>
-                    {todayCount > 0 && (
-                        <div className={styles.liveBadge}>
-                            <span className={styles.liveDot}></span>
-                            <span className={styles.liveText}>{todayCount} TODAY</span>
-                        </div>
-                    )}
-                    <button className={styles.iconBtn}>
-                        📍
-                    </button>
-                </div>
+                
                 <h1 className={styles.heroTitle}>
                     Explore <span className={styles.highlight}>nearby</span>
                 </h1>
