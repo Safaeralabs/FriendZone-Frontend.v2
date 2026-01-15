@@ -194,7 +194,6 @@ const Maps: React.FC = () => {
         return mapItems.filter(item => item.type === typeMap[activeFilter]);
     }, [mapItems, activeFilter]);
 
-    const todayCount = mapItems.filter(i => i.isToday).length;
 
     const handleMarkerClick = (item: MapItem) => {
         if (item.type === 'hangout') {

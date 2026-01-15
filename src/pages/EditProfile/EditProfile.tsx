@@ -145,4 +145,152 @@ const EditProfile: React.FC = () => {
           </div>
 
           <div className={styles.formGroup}>
-            <label class
+            <label className={styles.label}>Location</label>
+            <input
+              type="text"
+              className={styles.input}
+              value={formData.location}
+              onChange={e => handleInputChange('location', e.target.value)}
+              placeholder="City, State"
+            />
+          </div>
+        </div>
+
+        {/* Contact Info */}
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Contact Information</h2>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Phone</label>
+            <input
+              type="tel"
+              className={styles.input}
+              value={formData.phone}
+              onChange={e => handleInputChange('phone', e.target.value)}
+              placeholder="+1 (555) 000-0000"
+            />
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.label}>Email</label>
+            <input
+              type="email"
+              className={styles.input}
+              value={formData.email}
+              onChange={e => handleInputChange('email', e.target.value)}
+              placeholder="email@example.com"
+            />
+          </div>
+        </div>
+
+        {/* Interests */}
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Interests & Hobbies</h2>
+
+          <div className={styles.interestsGrid}>
+            {interests.map(interest => (
+              <div key={interest} className={styles.interestTag}>
+                <span className={styles.interestText}>{interest}</span>
+                <button
+                  className={styles.removeInterest}
+                  onClick={() => handleRemoveInterest(interest)}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.addInterestSection}>
+            <input
+              type="text"
+              className={styles.addInterestInput}
+              value={newInterest}
+              onChange={e => setNewInterest(e.target.value)}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddInterest(newInterest);
+                }
+              }}
+              placeholder="Add an interest..."
+            />
+            <button
+              className={styles.addInterestBtn}
+              onClick={() => handleAddInterest(newInterest)}
+              disabled={!newInterest.trim()}
+            >
+              Add
+            </button>
+          </div>
+
+          <div className={styles.suggestedInterests}>
+            <p className={styles.suggestedLabel}>Suggested:</p>
+            <div className={styles.suggestedGrid}>
+              {availableInterests
+                .filter(i => !interests.includes(i))
+                .map(interest => (
+                  <button
+                    key={interest}
+                    className={styles.suggestedTag}
+                    onClick={() => handleAddInterest(interest)}
+                  >
+                    + {interest}
+                  </button>
+                ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Privacy Settings */}
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Privacy</h2>
+
+          <div className={styles.privacyOptions}>
+            <div className={styles.privacyOption}>
+              <div className={styles.privacyInfo}>
+                <h3 className={styles.privacyTitle}>Show Profile to</h3>
+                <p className={styles.privacyDescription}>Who can see your profile</p>
+              </div>
+              <select className={styles.select}>
+                <option>Everyone</option>
+                <option>Friends Only</option>
+                <option>Private</option>
+              </select>
+            </div>
+
+            <div className={styles.privacyOption}>
+              <div className={styles.privacyInfo}>
+                <h3 className={styles.privacyTitle}>Show Hangout History</h3>
+                <p className={styles.privacyDescription}>Display past hangouts on profile</p>
+              </div>
+              <label className={styles.toggle}>
+                <input type="checkbox" defaultChecked />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+
+            <div className={styles.privacyOption}>
+              <div className={styles.privacyInfo}>
+                <h3 className={styles.privacyTitle}>Allow Friend Requests</h3>
+                <p className={styles.privacyDescription}>Let others send you requests</p>
+              </div>
+              <label className={styles.toggle}>
+                <input type="checkbox" defaultChecked />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Danger Zone */}
+        <div className={styles.section}>
+          <h2 className={`${styles.sectionTitle} ${styles.danger}`}>Danger Zone</h2>
+          <button className={styles.deleteBtn}>Delete Account</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default EditProfile;

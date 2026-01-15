@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styles from './Ambitions.module.css';
 
 interface Ambition {
@@ -21,7 +20,6 @@ interface Match {
 }
 
 const Ambitions: React.FC = () => {
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'active' | 'matches'>('active');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedIntent, setSelectedIntent] = useState<string>('coffee');

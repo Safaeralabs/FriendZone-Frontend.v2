@@ -23,7 +23,6 @@ const Login: React.FC = () => {
         updateUser({
           id: 'user-1',
           name: 'Demo User',
-          email: email,
         });
         navigate('/');
       } else {

@@ -31,7 +31,7 @@ const HangoutDetail: React.FC = () => {
   
   // Mock user status - esto vendría del backend
   const [userStatus, setUserStatus] = useState<HangoutStatus>('hosting'); // Cambia esto para probar
-  const [unreadMessages, setUnreadMessages] = useState(3);
+  const [unreadMessages] = useState(3);
 
   // Mock data
   const hangout = {
@@ -124,7 +124,6 @@ const HangoutDetail: React.FC = () => {
     navigate(`/chat/${hangoutId}`);
   };
 
-  const canAccessChat = userStatus === 'joined' || userStatus === 'hosting';
   const isHost = userStatus === 'hosting';
 
   return (

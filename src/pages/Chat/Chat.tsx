@@ -26,7 +26,7 @@ const Chat: React.FC = () => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const [messageText, setMessageText] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
+  const [isTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',

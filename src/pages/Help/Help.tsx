@@ -125,7 +125,7 @@ const Help: React.FC = () => {
             <section key={category} className={styles.category}>
               <h2 className={styles.categoryTitle}>{category}</h2>
               <div className={styles.faqList}>
-                {categoryFaqs.map((faq, index) => {
+                {categoryFaqs.map((faq) => {
                   const globalIndex = faqs.indexOf(faq);
                   const isExpanded = expandedIndex === globalIndex;
 

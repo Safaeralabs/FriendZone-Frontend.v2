@@ -1,24 +1,31 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
 import styles from './Settings.module.css';
 
 const Settings: React.FC = () => {
   const navigate = useNavigate();
-  const { user, updateUser } = useApp();
+  const { user } = useApp();
+
   const [notifications, setNotifications] = useState(true);
   const [locationSharing, setLocationSharing] = useState(true);
   const [showDistance, setShowDistance] = useState(true);
 
+  // Tu tipo UserProfile no tiene "email".
+  // Mostramos un valor seguro (si existe username/name) o "Not set".
+  const emailLabel = useMemo(() => {
+    // Ajusta estas keys si en tu UserProfile tienen otro nombre
+    const anyUser = user as unknown as { username?: string; name?: string } | null | undefined;
+    return anyUser?.username || anyUser?.name || 'Not set';
+  }, [user]);
+
   const handleLogout = () => {
-    // Clear user data
     localStorage.removeItem('user');
     navigate('/login');
   };
 
   const handleDeleteAccount = () => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      // Handle account deletion
       localStorage.removeItem('user');
       navigate('/');
     }
@@ -61,12 +68,13 @@ const Settings: React.FC = () => {
               <span className={styles.settingArrow}>→</span>
             </button>
 
+            {/* Mantengo el item "Email Address", pero sin user.email para que compile */}
             <button className={styles.settingItem} onClick={() => navigate('/settings/email')}>
               <div className={styles.settingInfo}>
                 <span className={styles.settingIcon}>📧</span>
                 <div className={styles.settingText}>
                   <h3 className={styles.settingLabel}>Email Address</h3>
-                  <p className={styles.settingDescription}>{user.email || 'Not set'}</p>
+                  <p className={styles.settingDescription}>{emailLabel}</p>
                 </div>
               </div>
               <span className={styles.settingArrow}>→</span>

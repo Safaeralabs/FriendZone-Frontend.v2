@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AppProvider } from '@/context/AppContext';
 import { OnboardingProvider } from '@/context/OnboardingContext';
 import BottomNav from '@/components/BottomNav/BottomNav';

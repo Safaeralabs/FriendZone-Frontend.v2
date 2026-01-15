@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useApp } from '@/context/AppContext';
 import styles from './Plans.module.css';
 
 type TabType = 'upcoming' | 'past' | 'hosting';
@@ -23,7 +22,6 @@ interface Hangout {
 
 const Plans: React.FC = () => {
   const navigate = useNavigate();
-  const { user } = useApp();
   const [activeTab, setActiveTab] = useState<TabType>('upcoming');
 
   // Mock data
@@ -123,7 +121,7 @@ const Plans: React.FC = () => {
     }
   };
 
-  const getTimeUntil = (date: string, time: string) => {
+  const getTimeUntil = (date: string) => {
     if (date === 'Today') return 'In 3h';
     if (date === 'Tomorrow') return 'In 1d';
     return date;
@@ -231,7 +229,7 @@ const Plans: React.FC = () => {
                       <span className={styles.timeValue}>
                         {activeTab === 'past'
                           ? hangout.date
-                          : getTimeUntil(hangout.date, hangout.time)}
+                          : getTimeUntil(hangout.date)}
                       </span>
                     </div>
                   </div>

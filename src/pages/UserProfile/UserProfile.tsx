@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './UserProfile.module.css';
 
 interface UserData {
@@ -85,7 +85,6 @@ const mockUserData: UserData = {
 
 const UserProfile: React.FC = () => {
   const navigate = useNavigate();
-  const { userId } = useParams();
   const [userData, setUserData] = useState<UserData>(mockUserData);
   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
