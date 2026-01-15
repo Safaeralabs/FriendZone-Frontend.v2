@@ -1,117 +1,68 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useOnboarding } from '@/context/OnboardingContext';
+import WelcomeStep from './steps/WelcomeStep';
+import BasicInfoStep from './steps/BasicInfoStep';
+import LocationStep from './steps/LocationStep';
+import LanguagesStep from './steps/LanguagesStep';
+import InterestsStep from './steps/InterestsStep';
+import VibesStep from './steps/VibesStep';
+import AvailabilityStep from './steps/AvailabilityStep';
+import HangoutStyleStep from './steps/HangoutStyleStep';
+import ReadyStep from './steps/ReadyStep';
 import styles from './Onboarding.module.css';
 
-const interests = ['Coffee', 'Running', 'Tech', 'Art', 'Music', 'Food', 'Books', 'Photography', 'Travel', 'Sports'];
-const vibes = ['Chill', 'Adventurous', 'Curious', 'Active', 'Creative', 'Thoughtful', 'Social', 'Spontaneous'];
-const availability = ['Weekday mornings', 'Weekday evenings', 'Weekend mornings', 'Weekend afternoons', 'Late nights'];
-
 const Onboarding: React.FC = () => {
-  const navigate = useNavigate();
-  const [step, setStep] = useState(1);
-  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
-  const [selectedVibes, setSelectedVibes] = useState<string[]>([]);
-  const [selectedAvailability, setSelectedAvailability] = useState<string[]>([]);
+  const { currentStep, totalSteps, prevStep } = useOnboarding();
 
-  const toggleSelection = (item: string, selected: string[], setter: (items: string[]) => void) => {
-    if (selected.includes(item)) {
-      setter(selected.filter(i => i !== item));
-    } else {
-      setter([...selected, item]);
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return <WelcomeStep />;
+      case 2:
+        return <BasicInfoStep />;
+      case 3:
+        return <LocationStep />;
+      case 4:
+        return <LanguagesStep />;
+      case 5:
+        return <InterestsStep />;
+      case 6:
+        return <VibesStep />;
+      case 7:
+        return <AvailabilityStep />;
+      case 8:
+        return <HangoutStyleStep />;
+      case 9:
+        return <ReadyStep />;
+      default:
+        return <WelcomeStep />;
     }
-  };
-
-  const handleContinue = () => {
-    if (step < 3) {
-      setStep(step + 1);
-    } else {
-      navigate('/');
-    }
-  };
-
-  const canContinue = () => {
-    if (step === 1) return selectedInterests.length >= 3;
-    if (step === 2) return selectedVibes.length >= 2;
-    if (step === 3) return selectedAvailability.length >= 1;
-    return false;
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.header}>
-        <div className={styles.progress}>
-          <div className={styles.progressBar} style={{ width: `${(step / 3) * 100}%` }}></div>
+    <div className={styles.container}>
+      {/* Progress Bar */}
+      {currentStep > 1 && currentStep < totalSteps && (
+        <div className={styles.progressBar}>
+          <button className={styles.backBtn} onClick={prevStep}>
+            ←
+          </button>
+          <div className={styles.progressTrack}>
+            <div
+              className={styles.progressFill}
+              style={{ width: `${((currentStep - 1) / (totalSteps - 2)) * 100}%` }}
+            />
+          </div>
+          <span className={styles.stepCounter}>
+            {currentStep - 1}/{totalSteps - 2}
+          </span>
         </div>
-        <p className={styles.stepIndicator}>Step {step} of 3</p>
-      </div>
+      )}
 
-      <div className={styles.content}>
-        {step === 1 && (
-          <>
-            <h1 className={styles.title}>What are you into?</h1>
-            <p className={styles.subtitle}>Pick at least 3 interests so we can match you with the right people</p>
-            <div className={styles.options}>
-              {interests.map(interest => (
-                <button
-                  key={interest}
-                  className={`${styles.option} ${selectedInterests.includes(interest) ? styles.selected : ''}`}
-                  onClick={() => toggleSelection(interest, selectedInterests, setSelectedInterests)}
-                >
-                  {interest}
-                </button>
-              ))}
-            </div>
-          </>
-        )}
-
-        {step === 2 && (
-          <>
-            <h1 className={styles.title}>What's your vibe?</h1>
-            <p className={styles.subtitle}>Choose at least 2 that feel like you</p>
-            <div className={styles.options}>
-              {vibes.map(vibe => (
-                <button
-                  key={vibe}
-                  className={`${styles.option} ${selectedVibes.includes(vibe) ? styles.selected : ''}`}
-                  onClick={() => toggleSelection(vibe, selectedVibes, setSelectedVibes)}
-                >
-                  {vibe}
-                </button>
-              ))}
-            </div>
-          </>
-        )}
-
-        {step === 3 && (
-          <>
-            <h1 className={styles.title}>When are you free?</h1>
-            <p className={styles.subtitle}>This helps us show you hangouts at the right times</p>
-            <div className={styles.options}>
-              {availability.map(time => (
-                <button
-                  key={time}
-                  className={`${styles.option} ${selectedAvailability.includes(time) ? styles.selected : ''}`}
-                  onClick={() => toggleSelection(time, selectedAvailability, setSelectedAvailability)}
-                >
-                  {time}
-                </button>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
-
-      <div className={styles.footer}>
-        <button
-          className={styles.continueBtn}
-          onClick={handleContinue}
-          disabled={!canContinue()}
-        >
-          {step === 3 ? 'Get started' : 'Continue'}
-        </button>
-      </div>
+      {/* Step Content */}
+      <div className={styles.content}>{renderStep()}</div>
     </div>
   );
 };
 
-export default Onboarding;
+export default Onboarding; // ← IMPORTANTE: Este debe estar al final

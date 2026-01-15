@@ -1,105 +1,151 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '@/context/AppContext';
-import { Hangout } from '@/types';
 import styles from './Plans.module.css';
+
+type TabType = 'upcoming' | 'past' | 'hosting';
+
+interface Hangout {
+  id: string;
+  title: string;
+  type: string;
+  emoji: string;
+  time: string;
+  date: string;
+  location: string;
+  attendees: number;
+  maxAttendees: number;
+  host: string;
+  isHost: boolean;
+  status: 'confirmed' | 'happening' | 'completed';
+  gradient: string;
+}
 
 const Plans: React.FC = () => {
   const navigate = useNavigate();
-  const { hangouts, user } = useApp();
-  const [activeTab, setActiveTab] = useState<'attending' | 'hosting'>('attending');
+  const { user } = useApp();
+  const [activeTab, setActiveTab] = useState<TabType>('upcoming');
 
-  const filteredHangouts = hangouts.filter(h => {
-    if (activeTab === 'attending') {
-      return h.participants.some(p => p.id === user.id && p.status !== 'host');
-    } else {
-      return h.hostId === user.id;
-    }
-  });
+  // Mock data
+  const upcomingHangouts: Hangout[] = [
+    {
+      id: '1',
+      title: 'Coffee & Deep Convos',
+      type: 'coffee',
+      emoji: '☕',
+      time: '2:30 PM',
+      date: 'Today',
+      location: 'Blue Bottle Coffee',
+      attendees: 3,
+      maxAttendees: 6,
+      host: 'Sarah',
+      isHost: false,
+      status: 'happening',
+      gradient: 'linear-gradient(135deg, #8B6914, #D4A574)',
+    },
+    {
+      id: '2',
+      title: 'Board Game Night',
+      type: 'games',
+      emoji: '🎲',
+      time: '7:00 PM',
+      date: 'Tomorrow',
+      location: 'Gamescape North',
+      attendees: 5,
+      maxAttendees: 8,
+      host: 'Mike',
+      isHost: false,
+      status: 'confirmed',
+      gradient: 'linear-gradient(135deg, #667EEA, #764BA2)',
+    },
+    {
+      id: '3',
+      title: 'Sunday Brunch Vibes',
+      type: 'brunch',
+      emoji: '🥐',
+      time: '11:00 AM',
+      date: 'Jan 19',
+      location: 'Zazie',
+      attendees: 4,
+      maxAttendees: 6,
+      host: 'You',
+      isHost: true,
+      status: 'confirmed',
+      gradient: 'linear-gradient(135deg, #D4A373, #F4E4C1)',
+    },
+  ];
 
-  const getTimeStatus = (hangout: Hangout) => {
-    const now = new Date();
-    const hangoutTime = new Date(hangout.time);
-    const diff = hangoutTime.getTime() - now.getTime();
-    const minutes = Math.floor(diff / (1000 * 60));
+  const pastHangouts: Hangout[] = [
+    {
+      id: '4',
+      title: 'Trivia Night',
+      type: 'games',
+      emoji: '🎯',
+      time: '8:00 PM',
+      date: 'Jan 12',
+      location: 'The Knockout',
+      attendees: 6,
+      maxAttendees: 8,
+      host: 'Alex',
+      isHost: false,
+      status: 'completed',
+      gradient: 'linear-gradient(135deg, #667EEA, #764BA2)',
+    },
+    {
+      id: '5',
+      title: 'Yoga in the Park',
+      type: 'active',
+      emoji: '🧘',
+      time: '9:00 AM',
+      date: 'Jan 10',
+      location: 'Golden Gate Park',
+      attendees: 8,
+      maxAttendees: 12,
+      host: 'Emma',
+      isHost: false,
+      status: 'completed',
+      gradient: 'linear-gradient(135deg, #56AB2F, #A8E063)',
+    },
+  ];
 
-    if (Math.abs(minutes) <= 15) {
-      return { label: 'LIVE', color: 'live', time: 'Now' };
-    }
+  const hostingHangouts = upcomingHangouts.filter(h => h.isHost);
 
-    if (diff < 0) {
-      const absMinutes = Math.abs(minutes);
-      if (absMinutes < 60) return { label: `${absMinutes}M AGO`, color: 'past', time: 'Past' };
-      if (absMinutes < 1440) return { label: `${Math.floor(absMinutes / 60)}H AGO`, color: 'past', time: 'Past' };
-      return { label: 'Yesterday', color: 'past', time: 'Past' };
+  const getHangouts = () => {
+    switch (activeTab) {
+      case 'upcoming':
+        return upcomingHangouts;
+      case 'past':
+        return pastHangouts;
+      case 'hosting':
+        return hostingHangouts;
+      default:
+        return upcomingHangouts;
     }
-
-    if (minutes < 60) {
-      return { label: `IN ${minutes}M`, color: 'soon', time: `In ${minutes}m` };
-    }
-    if (minutes < 1440) {
-      return { label: `IN ${Math.floor(minutes / 60)}H`, color: 'upcoming', time: `In ${Math.floor(minutes / 60)}h` };
-    }
-    const days = Math.floor(minutes / 1440);
-    if (days === 1) {
-      return { label: 'TOMORROW', color: 'upcoming', time: 'Tomorrow' };
-    }
-    return { label: `IN ${days}D`, color: 'upcoming', time: `In ${days} days` };
   };
 
-  const getLastMessage = (hangout: Hangout) => {
-    const messages = [
-      `${hangout.hostName}: Just arrived at the cafe!`,
-      `${hangout.hostName}: Running 5 min late`,
-      `${hangout.participants[0]?.name}: See you guys there!`,
-      `${hangout.hostName}: Bringing the blankets.`,
-      `You: Can't wait!`,
-    ];
-    return messages[Math.floor(Math.random() * messages.length)];
+  const getTimeUntil = (date: string, time: string) => {
+    if (date === 'Today') return 'In 3h';
+    if (date === 'Tomorrow') return 'In 1d';
+    return date;
   };
-
-  const getHangoutImage = (hangout: Hangout) => {
-    const gradients = {
-      community: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      offer: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-      'event-linked': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-    };
-    return gradients[hangout.type];
-  };
-
-  const upcomingCount = hangouts.filter(h => {
-    const time = new Date(h.time);
-    return time > new Date() && h.participants.some(p => p.id === user.id);
-  }).length;
 
   return (
     <div className={styles.page}>
-      {/* New Hero Header */}
       <div className={styles.heroHeader}>
-        <div className={styles.headerTop}>
-          <button className={styles.iconBtn} onClick={() => navigate('/')}>
-            🏠
-          </button>
-          <div className={styles.liveBadge}>
-            <span className={styles.liveDot}></span>
-            <span className={styles.liveText}>{upcomingCount} UPCOMING</span>
-          </div>
-          <button className={styles.iconBtn}>
-            🔍
-          </button>
-        </div>
+        
         <h1 className={styles.heroTitle}>
           Your <span className={styles.highlight}>hangouts</span>
         </h1>
         <p className={styles.heroSubtitle}>TRACK ALL YOUR PLANS</p>
       </div>
 
+      {/* Tabs */}
       <div className={styles.tabs}>
         <button
-          className={`${styles.tab} ${activeTab === 'attending' ? styles.activeTab : ''}`}
-          onClick={() => setActiveTab('attending')}
+          className={`${styles.tab} ${activeTab === 'upcoming' ? styles.activeTab : ''}`}
+          onClick={() => setActiveTab('upcoming')}
         >
-          Attending
+          Upcoming
         </button>
         <button
           className={`${styles.tab} ${activeTab === 'hosting' ? styles.activeTab : ''}`}
@@ -107,83 +153,133 @@ const Plans: React.FC = () => {
         >
           Hosting
         </button>
+        <button
+          className={`${styles.tab} ${activeTab === 'past' ? styles.activeTab : ''}`}
+          onClick={() => setActiveTab('past')}
+        >
+          Past
+        </button>
       </div>
 
+      {/* Content */}
       <div className={styles.content}>
-        {filteredHangouts.length === 0 ? (
+        {getHangouts().length === 0 ? (
           <div className={styles.empty}>
-            <div className={styles.emptyIcon}>🎉</div>
-            <p className={styles.emptyTitle}>
-              {activeTab === 'attending' ? 'No hangouts yet' : 'No hosted hangouts'}
+            <div className={styles.emptyIcon}>
+              {activeTab === 'upcoming' && '📅'}
+              {activeTab === 'hosting' && '🎯'}
+              {activeTab === 'past' && '✨'}
+            </div>
+            <h3 className={styles.emptyTitle}>
+              {activeTab === 'upcoming' && 'No upcoming plans'}
+              {activeTab === 'hosting' && 'Not hosting anything yet'}
+              {activeTab === 'past' && 'No past hangouts'}
+            </h3>
+            <p className={styles.emptyDescription}>
+              {activeTab === 'upcoming' && 'Browse Discovery to find something fun'}
+              {activeTab === 'hosting' && 'Create your first hangout and bring people together'}
+              {activeTab === 'past' && 'Join some hangouts to build your history'}
             </p>
-            <p className={styles.emptyText}>
-              {activeTab === 'attending' 
-                ? 'Join a hangout from Discovery to see it here' 
-                : 'Create your first hangout to get started'}
-            </p>
+            <button
+              className={styles.emptyBtn}
+              onClick={() => navigate(activeTab === 'hosting' ? '/create' : '/')}
+            >
+              {activeTab === 'hosting' ? 'Create Hangout' : 'Explore Now'}
+            </button>
           </div>
         ) : (
-          <div className={styles.list}>
-            {filteredHangouts.map((hangout, index) => {
-              const status = getTimeStatus(hangout);
-              const lastMessage = getLastMessage(hangout);
-              const hasNewMessages = Math.random() > 0.5;
+          <div className={styles.timeline}>
+            {getHangouts().map((hangout, index) => (
+              <div
+                key={hangout.id}
+                className={styles.timelineItem}
+                style={{ animationDelay: `${index * 0.1}s` }}
+                onClick={() => navigate(`/hangout/${hangout.id}`)}
+              >
+                {/* Timeline Dot */}
+                <div className={styles.timelineDot}>
+                  <div
+                    className={`${styles.dot} ${
+                      hangout.status === 'happening' ? styles.dotHappening : ''
+                    }`}
+                  />
+                  {index < getHangouts().length - 1 && <div className={styles.line} />}
+                </div>
 
-              return (
-                <div
-                  key={hangout.id}
-                  className={styles.hangoutCard}
-                  onClick={() => navigate(`/hangouts/${hangout.id}`)}
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  <div 
-                    className={styles.hangoutImage}
-                    style={{ background: getHangoutImage(hangout) }}
-                  >
-                    {status.color === 'live' && (
-                      <div className={styles.liveIndicator}>
-                        <span className={styles.liveDot2}></span>
-                      </div>
-                    )}
-                  </div>
+                {/* Card */}
+                <div className={styles.card}>
+                  {/* Status Badge */}
+                  {hangout.status === 'happening' && (
+                    <div className={styles.happeningBadge}>
+                      <span className={styles.liveDot}></span>
+                      HAPPENING NOW
+                    </div>
+                  )}
 
-                  <div className={styles.hangoutContent}>
-                    <div className={styles.hangoutHeader}>
-                      <div className={styles.hangoutTitleRow}>
-                        <h3 className={styles.hangoutTitle}>{hangout.title}</h3>
-                        {status.color === 'live' && (
-                          <span className={styles.liveBadge2}>LIVE</span>
-                        )}
-                      </div>
-                      <span className={`${styles.timeBadge} ${styles[status.color]}`}>
-                        {status.label}
+                  {/* Card Header */}
+                  <div className={styles.cardHeader}>
+                    <div
+                      className={styles.cardIcon}
+                      style={{ background: hangout.gradient }}
+                    >
+                      {hangout.emoji}
+                    </div>
+                    <div className={styles.cardTime}>
+                      <span className={styles.timeLabel}>
+                        {activeTab === 'past' ? 'Was' : 'Starts'}
+                      </span>
+                      <span className={styles.timeValue}>
+                        {activeTab === 'past'
+                          ? hangout.date
+                          : getTimeUntil(hangout.date, hangout.time)}
                       </span>
                     </div>
-                    <div className={styles.hangoutFooter}>
-                      <p className={styles.lastMessage}>{lastMessage}</p>
-                      <span className={styles.timeLabel}>{status.time}</span>
+                  </div>
+
+                  {/* Card Body */}
+                  <div className={styles.cardBody}>
+                    <h3 className={styles.cardTitle}>{hangout.title}</h3>
+                    <div className={styles.cardDetails}>
+                      <div className={styles.detail}>
+                        <span className={styles.detailIcon}>🕐</span>
+                        <span className={styles.detailText}>
+                          {hangout.date} • {hangout.time}
+                        </span>
+                      </div>
+                      <div className={styles.detail}>
+                        <span className={styles.detailIcon}>📍</span>
+                        <span className={styles.detailText}>{hangout.location}</span>
+                      </div>
+                      <div className={styles.detail}>
+                        <span className={styles.detailIcon}>👥</span>
+                        <span className={styles.detailText}>
+                          {hangout.attendees}/{hangout.maxAttendees} going
+                        </span>
+                      </div>
                     </div>
                   </div>
 
-                  {hasNewMessages && <div className={styles.unreadDot}></div>}
+                  {/* Card Footer */}
+                  <div className={styles.cardFooter}>
+                    <span className={styles.hostBadge}>
+                      {hangout.isHost ? '👑 Hosting' : `🎯 Hosted by ${hangout.host}`}
+                    </span>
+                    <button
+                      className={styles.arrowBtn}
+                      onClick={e => {
+                        e.stopPropagation();
+                        navigate(`/hangout/${hangout.id}`);
+                      }}
+                    >
+                      →
+                    </button>
+                  </div>
                 </div>
-              );
-            })}
-
-            <div className={styles.endOfList}>
-              <div className={styles.endIcon}>🎊</div>
-              <p className={styles.endText}>END OF INBOX</p>
-            </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
-
-      <button 
-        className={styles.fab}
-        onClick={() => navigate('/create')}
-      >
-        <span className={styles.fabIcon}>+</span>
-      </button>
     </div>
   );
 };

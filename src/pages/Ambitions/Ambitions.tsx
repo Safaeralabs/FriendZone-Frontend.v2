@@ -1,171 +1,238 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AmbitionIntent, AmbitionTimeWindow, AmbitionVibe } from '@/types';
-import { mockAmbitions, mockMatches } from '@/mock/ambitions';
 import styles from './Ambitions.module.css';
+
+interface Ambition {
+  id: string;
+  emoji: string;
+  title: string;
+  timeWindow: string;
+  vibe: string;
+  area?: string;
+  expiresAt: string;
+}
+
+interface Match {
+  id: string;
+  users: Array<{ id: string; name: string; avatar: string }>;
+  intent: string;
+  emoji: string;
+  expiresAt: string;
+}
 
 const Ambitions: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'active' | 'matches'>('active');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [selectedIntent, setSelectedIntent] = useState<string>('coffee');
+  const [selectedTime, setSelectedTime] = useState<string>('now');
+  const [selectedVibe, setSelectedVibe] = useState<string>('chill');
 
-  const [intent, setIntent] = useState<AmbitionIntent>('coffee');
-  const [timeWindow, setTimeWindow] = useState<AmbitionTimeWindow>('now');
-  const [vibe, setVibe] = useState<AmbitionVibe>('chill');
-
-  const intents: { value: AmbitionIntent; label: string; emoji: string; gradient: string }[] = [
-    { value: 'coffee', label: 'Coffee', emoji: '☕', gradient: 'linear-gradient(135deg, #8B6914, #D4A574)' },
-    { value: 'drinks', label: 'Drinks', emoji: '🍷', gradient: 'linear-gradient(135deg, #722F37, #C73866)' },
-    { value: 'brunch', label: 'Brunch', emoji: '🥐', gradient: 'linear-gradient(135deg, #D4A373, #F4E4C1)' },
-    { value: 'lunch', label: 'Lunch', emoji: '🍜', gradient: 'linear-gradient(135deg, #FF6B6B, #FFE66D)' },
-    { value: 'dinner', label: 'Dinner', emoji: '🍝', gradient: 'linear-gradient(135deg, #E94560, #FF6B9D)' },
-    { value: 'walk', label: 'Walk', emoji: '🚶', gradient: 'linear-gradient(135deg, #56AB2F, #A8E063)' },
-    { value: 'gym', label: 'Gym', emoji: '💪', gradient: 'linear-gradient(135deg, #FF512F, #F09819)' },
-    { value: 'clubbing', label: 'Clubbing', emoji: '🎵', gradient: 'linear-gradient(135deg, #8E2DE2, #4A00E0)' },
-    { value: 'movie', label: 'Movie', emoji: '🎬', gradient: 'linear-gradient(135deg, #2C3E50, #4CA1AF)' },
-    { value: 'games', label: 'Games', emoji: '🎮', gradient: 'linear-gradient(135deg, #667EEA, #764BA2)' },
+  // Mock data
+  const activeAmbitions: Ambition[] = [
+    {
+      id: '1',
+      emoji: '☕',
+      title: 'Coffee & Chat',
+      timeWindow: 'Now',
+      vibe: 'Chill',
+      area: 'Mission',
+      expiresAt: new Date(Date.now() + 45 * 60000).toISOString(),
+    },
+    {
+      id: '2',
+      emoji: '🍜',
+      title: 'Grab Lunch',
+      timeWindow: 'In 2h',
+      vibe: 'Social',
+      area: 'Downtown',
+      expiresAt: new Date(Date.now() + 120 * 60000).toISOString(),
+    },
   ];
 
-  const handleCreateAmbition = () => {
-    console.log('Creating ambition:', { intent, timeWindow, vibe });
-    setShowCreateModal(false);
-  };
+  const matches: Match[] = [
+    {
+      id: '1',
+      users: [
+        { id: '1', name: 'Sarah', avatar: 'SC' },
+        { id: '2', name: 'Mike', avatar: 'MJ' },
+        { id: '3', name: 'Emma', avatar: 'ER' },
+      ],
+      intent: 'Coffee',
+      emoji: '☕',
+      expiresAt: new Date(Date.now() + 30 * 60000).toISOString(),
+    },
+  ];
+
+  const intents = [
+    { value: 'coffee', label: 'Coffee', emoji: '☕' },
+    { value: 'drinks', label: 'Drinks', emoji: '🍷' },
+    { value: 'brunch', label: 'Brunch', emoji: '🥐' },
+    { value: 'lunch', label: 'Lunch', emoji: '🍜' },
+    { value: 'dinner', label: 'Dinner', emoji: '🍝' },
+    { value: 'walk', label: 'Walk', emoji: '🚶' },
+  ];
 
   const getTimeRemaining = (expiresAt: string) => {
     const now = new Date();
     const expires = new Date(expiresAt);
     const diff = expires.getTime() - now.getTime();
     const minutes = Math.floor(diff / (1000 * 60));
-    
+
     if (minutes < 60) return `${minutes}m`;
     const hours = Math.floor(minutes / 60);
     return `${hours}h`;
   };
 
-  const getIntentConfig = (intentValue: AmbitionIntent) => {
-    return intents.find(i => i.value === intentValue) || intents[0];
+  const handleCreateAmbition = () => {
+    console.log('Creating ambition:', { selectedIntent, selectedTime, selectedVibe });
+    setShowCreateModal(false);
   };
 
   return (
     <div className={styles.page}>
-      {/* Header Original */}
+      {/* Header Original - SIN CAMBIOS */}
       <div className={styles.heroHeader}>
-        
         <h1 className={styles.heroTitle}>
           What's the <span className={styles.highlight}>move?</span>
         </h1>
         <p className={styles.heroSubtitle}>PICK A SIGNAL TO BROADCAST</p>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs Originales - SIN CAMBIOS */}
       <div className={styles.tabs}>
         <button
           className={`${styles.tab} ${activeTab === 'active' ? styles.activeTab : ''}`}
           onClick={() => setActiveTab('active')}
         >
-          Active ({mockAmbitions.length})
+          Active ({activeAmbitions.length})
         </button>
         <button
           className={`${styles.tab} ${activeTab === 'matches' ? styles.activeTab : ''}`}
           onClick={() => setActiveTab('matches')}
         >
-          Matches ({mockMatches.length})
+          Matches ({matches.length})
         </button>
       </div>
 
       {/* Content */}
       <div className={styles.content}>
+        {/* Active Tab */}
         {activeTab === 'active' && (
-          <div className={styles.grid}>
-            {mockAmbitions.map((ambition, index) => {
-              const config = getIntentConfig(ambition.intent);
-              return (
-                <div
-                  key={ambition.id}
-                  className={styles.ambitionCard}
-                  style={{
-                    background: config.gradient,
-                    animationDelay: `${index * 0.1}s`,
-                  }}
-                >
-                  <div className={styles.cardGlow}></div>
-                  
-                  <div className={styles.cardTop}>
-                    <div className={styles.intentBadge}>
-                      <span className={styles.intentEmoji}>{config.emoji}</span>
-                      <span className={styles.intentLabel}>{config.label}</span>
-                    </div>
-                    <button className={styles.cardMenu}>⋮</button>
-                  </div>
-
-                  <div className={styles.cardCenter}>
-                    <div className={styles.bigEmoji}>{config.emoji}</div>
-                    <div className={styles.cardInfo}>
-                      <div className={styles.infoChip}>
-                        ⏰ {ambition.timeWindow}
-                      </div>
-                      <div className={styles.infoChip}>
-                        ✨ {ambition.vibe}
-                      </div>
-                      {ambition.area && (
-                        <div className={styles.infoChip}>
-                          📍 {ambition.area}
+          <>
+            {activeAmbitions.length === 0 ? (
+              <div className={styles.empty}>
+                <div className={styles.emptyIcon}>📡</div>
+                <h3 className={styles.emptyTitle}>No active ambitions</h3>
+                <p className={styles.emptyDescription}>
+                  Create an ambition to broadcast what you want to do right now
+                </p>
+              </div>
+            ) : (
+              <div className={styles.list}>
+                {activeAmbitions.map((ambition, index) => (
+                  <div
+                    key={ambition.id}
+                    className={styles.ambitionCard}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className={styles.cardHeader}>
+                      <div className={styles.cardIcon}>{ambition.emoji}</div>
+                      <div className={styles.cardInfo}>
+                        <h3 className={styles.cardTitle}>{ambition.title}</h3>
+                        <div className={styles.cardMeta}>
+                          <span className={styles.metaItem}>
+                            <span className={styles.metaIcon}>⏰</span>
+                            {ambition.timeWindow}
+                          </span>
+                          <span className={styles.metaDot}>•</span>
+                          <span className={styles.metaItem}>
+                            <span className={styles.metaIcon}>✨</span>
+                            {ambition.vibe}
+                          </span>
+                          {ambition.area && (
+                            <>
+                              <span className={styles.metaDot}>•</span>
+                              <span className={styles.metaItem}>
+                                <span className={styles.metaIcon}>📍</span>
+                                {ambition.area}
+                              </span>
+                            </>
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
-                  </div>
 
-                  <div className={styles.cardBottom}>
-                    <div className={styles.timeRemaining}>
-                      <span className={styles.timer}>⏱</span>
-                      <span className={styles.timeText}>
+                    <div className={styles.cardFooter}>
+                      <div className={styles.timeChip}>
+                        <span className={styles.pulseDot}></span>
                         {getTimeRemaining(ambition.expiresAt)} left
-                      </span>
+                      </div>
+                      <button className={styles.cancelBtn}>Cancel</button>
                     </div>
-                    <button className={styles.cancelBtn}>Cancel</button>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
 
+        {/* Matches Tab */}
         {activeTab === 'matches' && (
-          <div className={styles.list}>
-            {mockMatches.map((match) => {
-              const config = getIntentConfig(match.ambitions[0].intent);
-              return (
-                <div key={match.id} className={styles.matchCard}>
-                  <div className={styles.matchHeader}>
-                    <span className={styles.matchBadge}>New Match!</span>
-                    <span className={styles.timeRemaining}>
-                      {getTimeRemaining(match.expiresAt)} to respond
-                    </span>
-                  </div>
-
-                  <h3 className={styles.matchTitle}>
-                    {match.ambitions.length} people want to grab {match.ambitions[0].intent}
-                  </h3>
-
-                  <div className={styles.matchMembers}>
-                    {match.ambitions.map(amb => (
-                      <div key={amb.id} className={styles.member}>
-                        <div className={styles.memberAvatar}>
-                          {amb.userName.charAt(0)}
-                        </div>
-                        <span className={styles.memberName}>{amb.userName}</span>
+          <>
+            {matches.length === 0 ? (
+              <div className={styles.empty}>
+                <div className={styles.emptyIcon}>🎯</div>
+                <h3 className={styles.emptyTitle}>No matches yet</h3>
+                <p className={styles.emptyDescription}>
+                  When someone wants the same thing, you'll see them here
+                </p>
+              </div>
+            ) : (
+              <div className={styles.list}>
+                {matches.map((match, index) => (
+                  <div
+                    key={match.id}
+                    className={styles.matchCard}
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className={styles.matchHeader}>
+                      <div className={styles.matchBadge}>
+                        <span className={styles.matchBadgeIcon}>✨</span>
+                        New Match!
                       </div>
-                    ))}
-                  </div>
+                      <div className={styles.matchTimer}>
+                        {getTimeRemaining(match.expiresAt)} to respond
+                      </div>
+                    </div>
 
-                  <div className={styles.matchActions}>
-                    <button className={styles.declineBtn}>Decline</button>
-                    <button className={styles.acceptBtn}>Accept & Create Hangout</button>
+                    <div className={styles.matchBody}>
+                      <div className={styles.matchIntent}>
+                        <span className={styles.matchEmoji}>{match.emoji}</span>
+                        <h3 className={styles.matchTitle}>
+                          {match.users.length} people want {match.intent}
+                        </h3>
+                      </div>
+
+                      <div className={styles.matchUsers}>
+                        {match.users.map(user => (
+                          <div key={user.id} className={styles.matchUser}>
+                            <div className={styles.userAvatar}>{user.avatar}</div>
+                            <span className={styles.userName}>{user.name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className={styles.matchActions}>
+                      <button className={styles.declineBtn}>Decline</button>
+                      <button className={styles.acceptBtn}>Accept & Plan</button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 
@@ -175,7 +242,7 @@ const Ambitions: React.FC = () => {
         <span className={styles.createText}>New Ambition</span>
       </button>
 
-      {/* Modal original sin cambios */}
+      {/* Create Modal */}
       {showCreateModal && (
         <div className={styles.modalOverlay} onClick={() => setShowCreateModal(false)}>
           <div className={styles.modal} onClick={e => e.stopPropagation()}>
@@ -190,11 +257,13 @@ const Ambitions: React.FC = () => {
               <div className={styles.section}>
                 <label className={styles.label}>I want to...</label>
                 <div className={styles.intentGrid}>
-                  {intents.slice(0, 6).map(item => (
+                  {intents.map(item => (
                     <button
                       key={item.value}
-                      className={`${styles.intentBtn} ${intent === item.value ? styles.selected : ''}`}
-                      onClick={() => setIntent(item.value)}
+                      className={`${styles.intentBtn} ${
+                        selectedIntent === item.value ? styles.selected : ''
+                      }`}
+                      onClick={() => setSelectedIntent(item.value)}
                     >
                       <span className={styles.emoji}>{item.emoji}</span>
                       <span className={styles.text}>{item.label}</span>
@@ -213,8 +282,10 @@ const Ambitions: React.FC = () => {
                   ].map(item => (
                     <button
                       key={item.value}
-                      className={`${styles.timeBtn} ${timeWindow === item.value ? styles.selected : ''}`}
-                      onClick={() => setTimeWindow(item.value as AmbitionTimeWindow)}
+                      className={`${styles.timeBtn} ${
+                        selectedTime === item.value ? styles.selected : ''
+                      }`}
+                      onClick={() => setSelectedTime(item.value)}
                     >
                       {item.label}
                     </button>
@@ -233,8 +304,10 @@ const Ambitions: React.FC = () => {
                   ].map(item => (
                     <button
                       key={item.value}
-                      className={`${styles.vibeBtn} ${vibe === item.value ? styles.selected : ''}`}
-                      onClick={() => setVibe(item.value as AmbitionVibe)}
+                      className={`${styles.vibeBtn} ${
+                        selectedVibe === item.value ? styles.selected : ''
+                      }`}
+                      onClick={() => setSelectedVibe(item.value)}
                     >
                       {item.label}
                     </button>

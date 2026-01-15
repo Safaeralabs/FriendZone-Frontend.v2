@@ -1,0 +1,437 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  padding-bottom: 100px;
+}
+
+/* Header */
+.header {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  z-index: 100;
+}
+
+.cancelBtn,
+.saveBtn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: var(--font-weight-semibold);
+  transition: all 0.2s ease;
+}
+
+.cancelBtn {
+  color: var(--color-text-secondary);
+}
+
+.cancelBtn:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.saveBtn {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--color-text-tertiary);
+}
+
+.saveBtn.active {
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  color: white;
+}
+
+.saveBtn.active:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(101, 39, 252, 0.3);
+}
+
+.headerTitle {
+  font-size: 17px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+/* Content */
+.content {
+  padding: var(--spacing-lg);
+}
+
+/* Sections */
+.section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.sectionTitle {
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-lg);
+}
+
+.sectionTitle.danger {
+  color: var(--color-error);
+}
+
+/* Profile Photo */
+.photoSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl) 0;
+}
+
+.photoWrapper {
+  position: relative;
+}
+
+.photo {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: var(--font-weight-bold);
+  box-shadow: 0 8px 32px rgba(101, 39, 252, 0.3);
+}
+
+.editPhotoBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-surface);
+  border: 2px solid var(--color-background);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.editPhotoBtn:hover {
+  transform: scale(1.1);
+}
+
+.cameraIcon {
+  font-size: 18px;
+}
+
+.changePhotoBtn {
+  padding: 10px 24px;
+  background-color: rgba(101, 39, 252, 0.1);
+  color: var(--color-primary);
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  transition: all 0.2s ease;
+}
+
+.changePhotoBtn:hover {
+  background-color: rgba(101, 39, 252, 0.15);
+}
+
+/* Form Groups */
+.formGroup {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+}
+
+.label {
+  display: block;
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--color-surface);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  font-size: 15px;
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(101, 39, 252, 0.1);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+  line-height: var(--line-height-relaxed);
+}
+
+.charCount {
+  position: absolute;
+  bottom: -20px;
+  right: 0;
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+}
+
+/* Interests */
+.interestsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.interestTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  color: white;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: var(--font-weight-semibold);
+  animation: tagPop 0.3s ease-out;
+}
+
+@keyframes tagPop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.interestText {
+  user-select: none;
+}
+
+.removeInterest {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  font-size: 10px;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.removeInterest:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.addInterestSection {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.addInterestInput {
+  flex: 1;
+  padding: 12px 16px;
+  background-color: var(--color-surface);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  font-size: 15px;
+  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+}
+
+.addInterestInput:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(101, 39, 252, 0.1);
+}
+
+.addInterestBtn {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  color: white;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: var(--font-weight-semibold);
+  transition: all 0.2s ease;
+}
+
+.addInterestBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(101, 39, 252, 0.3);
+}
+
+.addInterestBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.suggestedInterests {
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.suggestedLabel {
+  font-size: 12px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.suggestedGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.suggestedTag {
+  padding: 6px 12px;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: var(--color-text-secondary);
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: var(--font-weight-medium);
+  transition: all 0.2s ease;
+}
+
+.suggestedTag:hover {
+  background-color: rgba(101, 39, 252, 0.1);
+  color: var(--color-primary);
+}
+
+/* Privacy Options */
+.privacyOptions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.privacyOption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg);
+  background-color: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 12px;
+}
+
+.privacyInfo {
+  flex: 1;
+}
+
+.privacyTitle {
+  font-size: 15px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+}
+
+.privacyDescription {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.select {
+  padding: 8px 12px;
+  background-color: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+/* Toggle Switch */
+.toggle {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  cursor: pointer;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+  transition: 0.3s;
+}
+
+.slider::before {
+  content: '';
+  position: absolute;
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle input:checked + .slider {
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+}
+
+.toggle input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+/* Danger Zone */
+.deleteBtn {
+  width: 100%;
+  padding: 14px;
+  background-color: rgba(255, 59, 48, 0.1);
+  color: var(--color-error);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: var(--font-weight-semibold);
+  transition: all 0.2s ease;
+}
+
+.deleteBtn:hover {
+  background-color: rgba(255, 59, 48, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 380px) {
+  .photo {
+    width: 100px;
+    height: 100px;
+    font-size: 40px;
+  }
+
+  .addInterestSection {
+    flex-direction: column;
+  }
+}

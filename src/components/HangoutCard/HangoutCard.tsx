@@ -36,12 +36,12 @@ const HangoutCard: React.FC<HangoutCardProps> = ({ hangout }) => {
     const now = new Date();
     const hangoutTime = new Date(hangout.time);
     const diff = hangoutTime.getTime() - now.getTime();
-    
+
     if (diff < 0) return null; // Past event
 
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    
+
     if (hours > 24) {
       const days = Math.floor(hours / 24);
       return `${days}d`;
@@ -74,7 +74,7 @@ const HangoutCard: React.FC<HangoutCardProps> = ({ hangout }) => {
   return (
     <div
       className={styles.card}
-      onClick={() => navigate(`/hangouts/${hangout.id}`)}
+      onClick={() => navigate(`/hangout/${hangout.id}`)}
     >
       {/* Time Remaining - Large Background */}
       {timeRemaining && (

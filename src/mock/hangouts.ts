@@ -1,6 +1,7 @@
 import { Hangout } from '@/types';
 
-const mockHangouts: Hangout[] = [
+// Cambiar de export default a export const
+export const mockHangouts: Hangout[] = [
   // TODAY - Morning
   {
     id: 'hangout-1',
@@ -31,6 +32,7 @@ const mockHangouts: Hangout[] = [
     status: 'active',
     createdAt: new Date(Date.now() - 3600000).toISOString(),
   },
+  // ... resto de los hangouts (los mismos que antes)
   {
     id: 'hangout-2',
     type: 'community',
@@ -62,8 +64,6 @@ const mockHangouts: Hangout[] = [
     status: 'active',
     createdAt: new Date(Date.now() - 7200000).toISOString(),
   },
-
-  // TODAY - Lunch
   {
     id: 'hangout-3',
     type: 'community',
@@ -128,8 +128,6 @@ const mockHangouts: Hangout[] = [
     status: 'active',
     createdAt: new Date(Date.now() - 5400000).toISOString(),
   },
-
-  // TODAY - Afternoon
   {
     id: 'hangout-5',
     type: 'community',
@@ -189,8 +187,6 @@ const mockHangouts: Hangout[] = [
     status: 'active',
     createdAt: new Date(Date.now() - 900000).toISOString(),
   },
-
-  // TODAY - Evening
   {
     id: 'hangout-7',
     type: 'community',
@@ -252,8 +248,6 @@ const mockHangouts: Hangout[] = [
     status: 'active',
     createdAt: new Date(Date.now() - 14400000).toISOString(),
   },
-
-  // TODAY - Night
   {
     id: 'hangout-9',
     type: 'community',
@@ -285,8 +279,6 @@ const mockHangouts: Hangout[] = [
     status: 'active',
     createdAt: new Date(Date.now() - 7200000).toISOString(),
   },
-
-  // TOMORROW - Morning
   {
     id: 'hangout-10',
     type: 'community',
@@ -344,8 +336,6 @@ const mockHangouts: Hangout[] = [
     status: 'active',
     createdAt: new Date(Date.now() - 1800000).toISOString(),
   },
-
-  // TOMORROW - Afternoon
   {
     id: 'hangout-12',
     type: 'community',
@@ -403,8 +393,6 @@ const mockHangouts: Hangout[] = [
     status: 'active',
     createdAt: new Date(Date.now() - 300000).toISOString(),
   },
-
-  // DAY AFTER TOMORROW
   {
     id: 'hangout-14',
     type: 'community',
@@ -466,5 +454,3 @@ const mockHangouts: Hangout[] = [
     createdAt: new Date(Date.now() - 43200000).toISOString(),
   },
 ];
-
-export default mockHangouts;

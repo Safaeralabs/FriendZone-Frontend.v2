@@ -7,6 +7,7 @@ import { mockUser } from '@/mock/user';
 
 interface AppContextType {
   user: UserProfile;
+  updateUser: (updates: Partial<UserProfile>) => void; // Añadir esta línea
   hangouts: Hangout[];
   events: Event[];
   offers: Offer[];
@@ -20,11 +21,16 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user] = useState<UserProfile>(mockUser);
+  const [user, setUser] = useState<UserProfile>(mockUser); // Cambiar a incluir setUser
   const [hangouts, setHangouts] = useState<Hangout[]>(mockHangouts);
   const [events] = useState<Event[]>(mockEvents);
   const [offers] = useState<Offer[]>(mockOffers);
   const [joinRequests, setJoinRequests] = useState<JoinRequest[]>([]);
+
+  // Función updateUser corregida
+  const updateUser = (updates: Partial<UserProfile>) => {
+    setUser(prev => ({ ...prev, ...updates }));
+  };
 
   const addHangout = (hangout: Hangout) => {
     setHangouts(prev => [hangout, ...prev]);
@@ -85,6 +91,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   const value: AppContextType = {
     user,
+    updateUser, // Añadir updateUser aquí
     hangouts,
     events,
     offers,
